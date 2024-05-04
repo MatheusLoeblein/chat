@@ -60,7 +60,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"
 
-import { EllipsisVertical } from 'lucide-react';
+import { EllipsisVertical, ChevronDown } from 'lucide-react';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger } from "@/components/ui/menubar";
 
 export default function Chat() {
@@ -295,32 +295,25 @@ export default function Chat() {
                       <h2>Matheus Eduardo Loeblein</h2>
                       <p className="text-sm text-muted-foreground">Fala meu mano como ta ai?</p>
                     </div>
-                    <div>
+                    <div className="flex flex-col justify-between items-end">
                       <span className="text-xs text-muted-foreground">Ontem</span>
-                      <Menubar>
+                      <Menubar className="rounded w-0 h-0 border-none shadow-none p-1 flex justify-center items-center">
                         <MenubarMenu>
-                          <MenubarTrigger>File</MenubarTrigger>
-                          <MenubarContent>
-                            <MenubarItem>
-                              New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+                          <MenubarTrigger className="rounded w-5 h-5 border-none p-0">
+                            <ChevronDown />
+
+                          </MenubarTrigger>
+                          <MenubarContent className="rounded">
+                            <MenubarItem className="rounded cursor-pointer">
+                              Arquivar conversa
                             </MenubarItem>
-                            <MenubarItem>
-                              New Window <MenubarShortcut>⌘N</MenubarShortcut>
-                            </MenubarItem>
-                            <MenubarItem disabled>New Incognito Window</MenubarItem>
-                            <MenubarSeparator />
-                            <MenubarSub>
-                              <MenubarSubTrigger>Share</MenubarSubTrigger>
-                              <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                              </MenubarSubContent>
-                            </MenubarSub>
-                            <MenubarSeparator />
-                            <MenubarItem>
-                              Print... <MenubarShortcut>⌘P</MenubarShortcut>
-                            </MenubarItem>
+                            <MenubarItem className="rounded cursor-pointer">
+                              Desativar notificações 
+                            </MenubarItem >
+                            <MenubarItem className="rounded cursor-pointer">
+                              Fixar conversa
+                            </MenubarItem >
+                            <MenubarItem disabled className="rounded">Sair do grupo</MenubarItem>
                           </MenubarContent>
                         </MenubarMenu>
                       </Menubar>
@@ -341,8 +334,21 @@ export default function Chat() {
                 Output
               </Badge> */}
 
-              <header className="z-10 top-0 flex h-[53px] items-center gap-1 border-b bg-background px-4">
-              <h1 className="text-xl font-semibold">Chat</h1>
+              <header className="z-10 top-0 flex h-[57px] items-center gap-1 border-b bg-background px-4">
+                <div>
+                  <div className="flex gap-3">
+                    <Avatar className="min-w-8">
+                      <AvatarImage className="rounded-full w-8 h-8" src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>
+                        <Skeleton className="rounded-full w-8 h-8 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h2 className="text-sm">Matheus Eduardo Loeblein</h2>
+                      <p className="text-xs text-muted-foreground">visto por último hoje às 12:45</p>
+                    </div>
+                  </div>
+                </div>
               {/* <Drawer>
                 <DrawerTrigger asChild>
                   <Button variant="ghost" size="icon" className="md:hidden">
@@ -470,7 +476,7 @@ export default function Chat() {
               </header>
 
               <div className="flex-1" />
-              <div className="overflow-y-scroll flex flex-col px-6 max-h-[calc(100vh-196px)]">
+              <div className="overflow-y-scroll flex flex-col px-6 max-h-[calc(100vh-200px)]">
                 {/* Message owner*/}
                 <div className="flex gap-6 items-start py-3 self-end ">
                   <div className="bg-primary w-max px-2 py-1 rounded-lg relative shadow-lg mt-5 break-all max-w-96 md:max-w-sm lg:max-w-xl">
