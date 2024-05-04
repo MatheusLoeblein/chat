@@ -18,6 +18,7 @@ import {
   Mic,
   Paperclip,
   Rabbit,
+  SearchIcon,
   Settings,
   Settings2,
   Share,
@@ -41,7 +42,9 @@ import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -56,6 +59,9 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"
+
+import { EllipsisVertical } from 'lucide-react';
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger } from "@/components/ui/menubar";
 
 export default function Chat() {
   const [status, setStatus] = useState(socket.connected)
@@ -239,10 +245,95 @@ export default function Chat() {
           </nav>
         </aside>
         <div className="flex flex-col">
-          <main className="grid flex-1 gap-4 overflow-auto md:grid-cols-[2fr,4fr] lg:grid-cols-[2fr,3fr,3fr]">
+          <main className="grid flex-1 overflow-auto md:grid-cols-[2fr,4fr] lg:grid-cols-[2fr,3fr,3fr]">
+            
             <div
-              className="relative hidden flex-col items-start gap-8 md:flex " x-chunk="dashboard-03-chunk-0"
+              className="relative hidden flex-col items-start md:flex" x-chunk="dashboard-03-chunk-0"
             >
+
+              <div className="w-full px-4 pt-4 pb-2">
+                <div className="flex items-center justify-between mb-6 ">
+                  <h1 className="text-2xl font-bold tracking-tighter ">Chats</h1>
+                  <Button variant='ghost' className="p-1 px-3 rounded">
+                    <EllipsisVertical size={20}/>  
+                  </Button>  
+                </div>
+
+                <div className="mb-2 relative">
+                  <Input className="w-full rounded pl-12" placeholder='Pesquisar'/>
+                  <SearchIcon className="absolute top-1/2 -translate-y-1/2 left-4" size={17}/>
+                </div>
+
+
+                <div className="space-x-2">
+                  <Button variant={"default"} className="rounded">
+                    Tudo
+                  </Button>
+                  <Button variant="outline" className="rounded">
+                    Não lidas
+                  </Button>
+                  <Button variant="outline" className="rounded">
+                    Grupos
+                  </Button>
+                </div>
+
+              </div>
+
+
+              <div className="w-full pr-1">
+
+                <div className="flex gap-4 px-4 py-3 hover:bg-muted cursor-pointer transition-all duration-300">
+                  <Avatar className="min-w-12">
+                    <AvatarImage className="rounded-full w-12 h-12" src="https://github.com/shadcn.png" alt="@shadcn" />
+                    <AvatarFallback>
+                      <Skeleton className="rounded-full w-12 h-12 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="flex justify-between w-full">
+                    <div className="space-y-1">
+                      <h2>Matheus Eduardo Loeblein</h2>
+                      <p className="text-sm text-muted-foreground">Fala meu mano como ta ai?</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground">Ontem</span>
+                      <Menubar>
+                        <MenubarMenu>
+                          <MenubarTrigger>File</MenubarTrigger>
+                          <MenubarContent>
+                            <MenubarItem>
+                              New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarItem>
+                              New Window <MenubarShortcut>⌘N</MenubarShortcut>
+                            </MenubarItem>
+                            <MenubarItem disabled>New Incognito Window</MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarSub>
+                              <MenubarSubTrigger>Share</MenubarSubTrigger>
+                              <MenubarSubContent>
+                                <MenubarItem>Email link</MenubarItem>
+                                <MenubarItem>Messages</MenubarItem>
+                                <MenubarItem>Notes</MenubarItem>
+                              </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                            <MenubarItem>
+                              Print... <MenubarShortcut>⌘P</MenubarShortcut>
+                            </MenubarItem>
+                          </MenubarContent>
+                        </MenubarMenu>
+                      </Menubar>
+
+                    </div>
+                  </div>
+                  
+                </div>
+
+              </div>
+
+
+
             </div>
 
             <div className="relative flex flex-col bg-muted/100  lg:col-span-2 rounded-none border-l border-gray-200 dark:border-muted">
@@ -494,7 +585,6 @@ export default function Chat() {
 
             <div className="p-2 border-t bg-background">
 
-            
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(handleEmitEvent)} 
