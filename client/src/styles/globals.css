@@ -61,3 +61,21 @@
       @apply bg-background text-foreground;
     }
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #6d28d9;
+    border-radius: 1px;
+    z-index: 20;
+  }

@@ -62,6 +62,8 @@ export default function Chat() {
   const [events, setEvents] = useState<any[]>([])
   const [value, setValue] = useState<string>('')
 
+  
+
   const formSchema = z.object({
     message: z.string(),
   })
@@ -69,6 +71,9 @@ export default function Chat() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
+
+
+  const { message } = form.watch()
 
   useEffect(() => {
     function onConnect(){
@@ -115,15 +120,7 @@ export default function Chat() {
     
   }
 
-  return (
-    //       {/* <div className="bg-white border border-gray-300 rounded-md shadow-md p-4 flex flex-col gap-4 text-black w-max">
-    //         <span>Status: {status ? 'Conectado' : 'Desconectado'}</span>
-    //         <button 
-    //         className={`${!status ? 'bg-emerald-600' : 'bg-red-500'} text-white px-3 py-1 rounded-md`}
-    //         onClick={!status ? handleConnect : handleDisconnect}
-    //         >{!status ? 'Conectar' : 'Desconectar'}</button>
-    //       </div> */}
-    
+  return (  
       <div className="grid h-screen w-full pl-[56px]">
         <aside className="fixed inset-y left-0 z-20 flex h-full flex-col border-r">
           <nav className="grid gap-1 p-2">
@@ -242,257 +239,318 @@ export default function Chat() {
           </nav>
         </aside>
         <div className="flex flex-col">
-          <header className="z-10 top-0 flex h-[53px] items-center gap-1 border-b bg-background px-4">
-            <h1 className="text-xl font-semibold">Chat</h1>
-            {/* <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Settings className="size-4" />
-                  <span className="sr-only">Settings</span>
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent className="max-h-[80vh]">
-                <DrawerHeader>
-                  <DrawerTitle>Configuration</DrawerTitle>
-                  <DrawerDescription>
-                    Configure the settings for the model and messages.
-                  </DrawerDescription>
-                </DrawerHeader>
-                <form className="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
-                  <fieldset className="grid gap-6 rounded border p-4">
-                    <legend className="-ml-1 px-1 text-sm font-medium">
-                      Settings
-                    </legend>
-                    <div className="grid gap-3">
-                      <Label htmlFor="model">Model</Label>
-                      <Select>
-                        <SelectTrigger
-                          id="model"
-                          className="items-start [&_[data-description]]:hidden"
-                        >
-                          <SelectValue placeholder="Select a model" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="genesis">
-                            <div className="flex items-start gap-3 text-muted-foreground">
-                              <Rabbit className="size-5" />
-                              <div className="grid gap-0.5">
-                                <p>
-                                  Neural{" "}
-                                  <span className="font-medium text-foreground">
-                                    Genesis
-                                  </span>
-                                </p>
-                                <p className="text-xs" data-description>
-                                  Our fastest model for general use cases.
-                                </p>
-                              </div>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="explorer">
-                            <div className="flex items-start gap-3 text-muted-foreground">
-                              <Bird className="size-5" />
-                              <div className="grid gap-0.5">
-                                <p>
-                                  Neural{" "}
-                                  <span className="font-medium text-foreground">
-                                    Explorer
-                                  </span>
-                                </p>
-                                <p className="text-xs" data-description>
-                                  Performance and speed for efficiency.
-                                </p>
-                              </div>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="quantum">
-                            <div className="flex items-start gap-3 text-muted-foreground">
-                              <Turtle className="size-5" />
-                              <div className="grid gap-0.5">
-                                <p>
-                                  Neural{" "}
-                                  <span className="font-medium text-foreground">
-                                    Quantum
-                                  </span>
-                                </p>
-                                <p className="text-xs" data-description>
-                                  The most powerful model for complex
-                                  computations.
-                                </p>
-                              </div>
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="temperature">Temperature</Label>
-                      <Input id="temperature" type="number" placeholder="0.4" />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-p">Top P</Label>
-                      <Input id="top-p" type="number" placeholder="0.7" />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Top K</Label>
-                      <Input id="top-k" type="number" placeholder="0.0" />
-                    </div>
-                  </fieldset>
-                  <fieldset className="grid gap-6 rounded border p-4">
-                    <legend className="-ml-1 px-1 text-sm font-medium">
-                      Messages
-                    </legend>
-                    <div className="grid gap-3">
-                      <Label htmlFor="role">Role</Label>
-                      <Select defaultValue="system">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">System</SelectItem>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="assistant">Assistant</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="content">Content</Label>
-                      <Textarea id="content" placeholder="You are a..." />
-                    </div>
-                  </fieldset>
-                </form>
-              </DrawerContent>
-            </Drawer> */}
-
-            <div className="ml-auto flex gap-2 items-center">
-              <ModeToggle/>
-            </div>
-
-          </header>
           <main className="grid flex-1 gap-4 overflow-auto md:grid-cols-[2fr,4fr] lg:grid-cols-[2fr,3fr,3fr]">
             <div
               className="relative hidden flex-col items-start gap-8 md:flex " x-chunk="dashboard-03-chunk-0"
             >
             </div>
-            <div className="relative flex h-full min-h-[50vh] flex-col bg-muted/100 p-4 lg:col-span-2 rounded-none border-l border-gray-200 dark:border-muted">
-              <Badge variant="outline" className="absolute right-3 top-3">
-                Output
-              </Badge>
-              <div className="flex-1" />
 
-              {/* Message owner*/}
-              <div className="flex gap-6 items-start py-3 self-end ">
-                <div className="bg-primary w-max px-2 py-1 rounded-lg relative shadow-lg mt-5 break-all max-w-96 md:max-w-sm lg:max-w-xl">
-                  <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet"  className="-rotate-90 scale-[2] absolute -right-[13px] top-[1.4px] text-primary"  version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path></svg>
-                  <p className="text-white ">Testado</p> 
+            <div className="relative flex flex-col bg-muted/100  lg:col-span-2 rounded-none border-l border-gray-200 dark:border-muted">
+              {/* <Badge variant="outline" className="absolute right-3 top-3">
+                Output
+              </Badge> */}
+
+              <header className="z-10 top-0 flex h-[53px] items-center gap-1 border-b bg-background px-4">
+              <h1 className="text-xl font-semibold">Chat</h1>
+              {/* <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Settings className="size-4" />
+                    <span className="sr-only">Settings</span>
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="max-h-[80vh]">
+                  <DrawerHeader>
+                    <DrawerTitle>Configuration</DrawerTitle>
+                    <DrawerDescription>
+                      Configure the settings for the model and messages.
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <form className="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
+                    <fieldset className="grid gap-6 rounded border p-4">
+                      <legend className="-ml-1 px-1 text-sm font-medium">
+                        Settings
+                      </legend>
+                      <div className="grid gap-3">
+                        <Label htmlFor="model">Model</Label>
+                        <Select>
+                          <SelectTrigger
+                            id="model"
+                            className="items-start [&_[data-description]]:hidden"
+                          >
+                            <SelectValue placeholder="Select a model" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="genesis">
+                              <div className="flex items-start gap-3 text-muted-foreground">
+                                <Rabbit className="size-5" />
+                                <div className="grid gap-0.5">
+                                  <p>
+                                    Neural{" "}
+                                    <span className="font-medium text-foreground">
+                                      Genesis
+                                    </span>
+                                  </p>
+                                  <p className="text-xs" data-description>
+                                    Our fastest model for general use cases.
+                                  </p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="explorer">
+                              <div className="flex items-start gap-3 text-muted-foreground">
+                                <Bird className="size-5" />
+                                <div className="grid gap-0.5">
+                                  <p>
+                                    Neural{" "}
+                                    <span className="font-medium text-foreground">
+                                      Explorer
+                                    </span>
+                                  </p>
+                                  <p className="text-xs" data-description>
+                                    Performance and speed for efficiency.
+                                  </p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="quantum">
+                              <div className="flex items-start gap-3 text-muted-foreground">
+                                <Turtle className="size-5" />
+                                <div className="grid gap-0.5">
+                                  <p>
+                                    Neural{" "}
+                                    <span className="font-medium text-foreground">
+                                      Quantum
+                                    </span>
+                                  </p>
+                                  <p className="text-xs" data-description>
+                                    The most powerful model for complex
+                                    computations.
+                                  </p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="temperature">Temperature</Label>
+                        <Input id="temperature" type="number" placeholder="0.4" />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="top-p">Top P</Label>
+                        <Input id="top-p" type="number" placeholder="0.7" />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="top-k">Top K</Label>
+                        <Input id="top-k" type="number" placeholder="0.0" />
+                      </div>
+                    </fieldset>
+                    <fieldset className="grid gap-6 rounded border p-4">
+                      <legend className="-ml-1 px-1 text-sm font-medium">
+                        Messages
+                      </legend>
+                      <div className="grid gap-3">
+                        <Label htmlFor="role">Role</Label>
+                        <Select defaultValue="system">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="system">System</SelectItem>
+                            <SelectItem value="user">User</SelectItem>
+                            <SelectItem value="assistant">Assistant</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="content">Content</Label>
+                        <Textarea id="content" placeholder="You are a..." />
+                      </div>
+                    </fieldset>
+                  </form>
+                </DrawerContent>
+              </Drawer> */}
+
+              <div className="ml-auto flex gap-2 items-center">
+                <ModeToggle/>
+              </div>
+
+              </header>
+
+              <div className="flex-1" />
+              <div className="overflow-y-scroll flex flex-col px-6 max-h-[calc(100vh-196px)]">
+                {/* Message owner*/}
+                <div className="flex gap-6 items-start py-3 self-end ">
+                  <div className="bg-primary w-max px-2 py-1 rounded-lg relative shadow-lg mt-5 break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                    <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet"  className="-rotate-90 scale-[2] absolute -right-[13px] top-[1.4px] text-primary"  version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path></svg>
+                    <p className="text-white ">Testado</p> 
+                  </div>
+
+                  <Avatar className="min-w-10">
+                      <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>
+                        <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                      </AvatarFallback>
+                    </Avatar>
+
                 </div>
 
-                <Avatar className="min-w-10">
-                    <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>
-                      <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
-                    </AvatarFallback>
-                  </Avatar>
+                {/* Message other*/}
+                <div className="flex gap-6 items-start py-3 self-start">
+                    <Avatar className="min-w-10">
+                      <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>
+                        <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                      </AvatarFallback>
+                    </Avatar>
 
-              </div>
-              {/* Message other*/}
-              <div className="flex gap-6 items-start py-3 self-start">
+                  
+                  <div className="flex flex-col gap-2 mt-5">
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <svg viewBox="0 0 8 13" height="13" width="8"  preserveAspectRatio="xMidYMid meet" className="rotate-90 scale-[2] absolute -left-[13px] top-[1.4px] text-gray-600" version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-out</title><path opacity="0.13" d="M5.188,1H0v11.193l6.467-8.625 C7.526,2.156,6.958,1,5.188,1z"></path><path fill="currentColor" d="M5.188,0H0v11.193l6.467-8.625C7.526,1.156,6.958,0,5.188,0z"></path></svg>
+                        <p className=" text-white">Testado</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">Mais texto pode se inserido aqui</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">Mais texto pode se inserido aqui</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">
+                          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt ex tempora distinctio magnam fugiat officia ratione sequi nulla debitis, reprehenderit excepturi suscipit pariatur libero! Voluptas omnis nihil voluptatum nemo natus!
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit ad cupiditate illum ratione dolorum veniam aut aperiam earum illo fugit provident tempore error repudiandae doloremque fuga, sint corrupti nisi. Veritatis.</p> 
+                      </div>
+                    </div>
+                </div>
+
+                {/* Message owner*/}
+                <div className="flex gap-6 items-start py-3 self-end ">
+                  <div className="bg-primary w-max px-2 py-1 rounded-lg relative shadow-lg mt-5 break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                    <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet"  className="-rotate-90 scale-[2] absolute -right-[13px] top-[1.4px] text-primary"  version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path></svg>
+                    <p className="text-white ">Testado</p> 
+                  </div>
+
                   <Avatar className="min-w-10">
-                    <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>
-                      <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
-                    </AvatarFallback>
-                  </Avatar>
+                      <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>
+                        <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                      </AvatarFallback>
+                    </Avatar>
+
+                </div>
+
+                {/* Message other*/}
+                <div className="flex gap-6 items-start py-3 self-start">
+                    <Avatar className="min-w-10">
+                      <AvatarImage className="rounded-full w-10 h-10" src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>
+                        <Skeleton className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-700 animate-pulse"></Skeleton>  
+                      </AvatarFallback>
+                    </Avatar>
+
+                  
+                  <div className="flex flex-col gap-2 mt-5">
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <svg viewBox="0 0 8 13" height="13" width="8"  preserveAspectRatio="xMidYMid meet" className="rotate-90 scale-[2] absolute -left-[13px] top-[1.4px] text-gray-600" version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-out</title><path opacity="0.13" d="M5.188,1H0v11.193l6.467-8.625 C7.526,2.156,6.958,1,5.188,1z"></path><path fill="currentColor" d="M5.188,0H0v11.193l6.467-8.625C7.526,1.156,6.958,0,5.188,0z"></path></svg>
+                        <p className=" text-white">Testado</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">Mais texto pode se inserido aqui</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">Mais texto pode se inserido aqui</p> 
+                      </div>
+
+                      <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
+                        <p className=" text-white">
+                          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt ex tempora distinctio magnam fugiat officia ratione sequi nulla debitis, reprehenderit excepturi suscipit pariatur libero! Voluptas omnis nihil voluptatum nemo natus!
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit ad cupiditate illum ratione dolorum veniam aut aperiam earum illo fugit provident tempore error repudiandae doloremque fuga, sint corrupti nisi. Veritatis.</p> 
+                      </div>
+                    </div>
+                </div>
 
                 
-                <div className="flex flex-col gap-2 mt-5">
-                    <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
-                      <svg viewBox="0 0 8 13" height="13" width="8"  preserveAspectRatio="xMidYMid meet" className="rotate-90 scale-[2] absolute -left-[13px] top-[1.4px] text-gray-600" version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13"><title>tail-out</title><path opacity="0.13" d="M5.188,1H0v11.193l6.467-8.625 C7.526,2.156,6.958,1,5.188,1z"></path><path fill="currentColor" d="M5.188,0H0v11.193l6.467-8.625C7.526,1.156,6.958,0,5.188,0z"></path></svg>
-                      <p className=" text-white">Testado</p> 
-                    </div>
 
-                    <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
-                      <p className=" text-white">Mais texto pode se inserido aqui</p> 
-                    </div>
-
-                    <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
-                      <p className=" text-white">Mais texto pode se inserido aqui</p> 
-                    </div>
-
-                    <div className="bg-gray-600 w-max px-2 py-1 rounded-lg relative shadow-lg break-all max-w-96 md:max-w-sm lg:max-w-xl">
-                      <p className=" text-white">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt ex tempora distinctio magnam fugiat officia ratione sequi nulla debitis, reprehenderit excepturi suscipit pariatur libero! Voluptas omnis nihil voluptatum nemo natus!
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit ad cupiditate illum ratione dolorum veniam aut aperiam earum illo fugit provident tempore error repudiandae doloremque fuga, sint corrupti nisi. Veritatis.</p> 
-                    </div>
-                  </div>
-              </div>
-
-              {
-                events && events.length > 0 ? events.map((event, index) => {
+                {events && events.length > 0 ? events.map((event, index) => {
                   return(
                     <span key={index}>
                       {JSON.stringify(event)}
                     </span>
                   )
                 })
-
                 :
                 <span>
-                  Nenhum evento adicionado
-                </span>
-              }
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleEmitEvent)} 
-                className="relative overflow-hidden rounded border bg-background focus-within:ring-1 focus-within:ring-ring" x-chunk="dashboard-03-chunk-1"
-              >
-                <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel htmlFor="message" className="sr-only" >Message</FormLabel>
-                        <FormControl>
-                            <Textarea
-                            {...field}
-                            id="message"
-                            placeholder="Escreve uma messagem aqui..."
-                            className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-                            />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                </span>}
 
-                <div className="flex items-center p-3 pt-0">
-                
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <Paperclip className="size-4" />
-                          <span className="sr-only">Attach file</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="top">Attach File</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <Mic className="size-4" />
-                          <span className="sr-only">Use Microphone</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="top">Use Microphone</TooltipContent>
-                    </Tooltip>
-                  <Button type="submit" size="sm" className="ml-auto gap-1.5 rounded">
-                    Enviar menssagem
-                    <CornerDownLeft className="size-3.5" />
-                  </Button>
-                </div>
-              </form>
-            </Form>
+              </div>
+
+            <div className="p-2 border-t bg-background">
+
+            
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleEmitEvent)} 
+                  className=" relative overflow-hidden rounded border focus-within:ring-1 focus-within:ring-ring " x-chunk="dashboard-03-chunk-1"
+                >
+                  <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel htmlFor="message" className="sr-only" >Message</FormLabel>
+                          <FormControl>
+                              <Textarea
+                              {...field}
+                              id="message"
+                              placeholder="Escreve uma messagem aqui..."
+                              className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
+                              />
+                          </FormControl>
+                          {/* <FormMessage /> */}
+                        </FormItem>
+                      )}
+                    />
+
+                  <div className="flex items-center p-3 pt-0">
+                  
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" type="button">
+                            <Paperclip className="size-4" />
+                            <span className="sr-only">Attach file</span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">Attach File</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" type="button">
+                            <Mic className="size-4" />
+                            <span className="sr-only">Use Microphone</span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">Use Microphone</TooltipContent>
+                      </Tooltip>
+
+                    <Button type="submit" size="sm" className="ml-auto gap-1.5 rounded">
+                      Enviar menssagem
+                      <CornerDownLeft className="size-3.5" />
+                    </Button>
+
+                  </div>
+                </form>
+              </Form>
+
+            </div>
 
 
             </div>
