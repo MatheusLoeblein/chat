@@ -14,7 +14,7 @@ export function PasswordInput({ field }:{ field: ControllerRenderProps<{ usernam
   
     return(
       <div className="relative">
-        <Input placeholder="sua senha" {...field} type={isView ? "text" : "password"} className="pr-10" />
+        <Input placeholder="Digite sua senha" {...field} type={isView ? "text" : "password"} className="pr-10 rounded" id="password"/>
   
         <button type='button' className="absolute top-1/2 -translate-y-1/2 right-3 font-thin text-gray-500" onClick={toggleVisibility} >
           {isView ? <EyeOff strokeWidth={1.2} size={17}/> : <Eye strokeWidth={1.2} size={17}/>}
