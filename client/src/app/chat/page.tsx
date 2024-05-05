@@ -295,13 +295,12 @@ export default function Chat() {
                       <h2>Matheus Eduardo Loeblein</h2>
                       <p className="text-sm text-muted-foreground">Fala meu mano como ta ai?</p>
                     </div>
-                    <div className="flex flex-col justify-between items-end">
+                    <div className="flex flex-col justify-between items-center">
                       <span className="text-xs text-muted-foreground">Ontem</span>
-                      <Menubar className="rounded w-0 h-0 border-none shadow-none p-1 flex justify-center items-center">
+                      <Menubar className="rounded w-0 h-0 border-none shadow-none p-0 flex justify-center items-center bg-none mb-2">
                         <MenubarMenu>
                           <MenubarTrigger className="rounded w-5 h-5 border-none p-0">
                             <ChevronDown />
-
                           </MenubarTrigger>
                           <MenubarContent className="rounded">
                             <MenubarItem className="rounded cursor-pointer">
