@@ -2,6 +2,7 @@ import { AccountRepository } from '../../../application/repository/AccountReposi
 import Account from '../../../domain/Account'
 
 export class AccountRepositoryInMemory implements AccountRepository {
+
     accounts: Account[] = []
 
     async save(account: Account): Promise<void> {
@@ -16,6 +17,14 @@ export class AccountRepositoryInMemory implements AccountRepository {
     }
     async getByEmail(email: string): Promise<undefined | Account> {
         const account = this.accounts.find((account: Account) => account.email.getValue() === email)
+
+        if (!account) return
+
+        return account
+    }
+
+    async getByUsername(username: string): Promise<Account> {
+        const account = this.accounts.find((account: Account) => account.username.getValue() === username)
 
         if (!account) return
 

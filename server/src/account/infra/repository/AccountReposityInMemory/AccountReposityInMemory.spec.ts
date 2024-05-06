@@ -62,4 +62,26 @@ describe('Account In Memory Repository', () => {
         expect(getedAccount.name.getValue()).toBe(name)
         expect(getedAccount.password.validate(password)).toBe(true)
     })
+
+    test('getByUsername() Should be return accont existent', async () => {
+        const username = 'JohnDoe';
+        const name = 'John Doe';
+        const email = 'john@example.com';
+        const isAdmin = false;
+        const password = 'password123';
+
+        const account = Account.create(username, name, email, isAdmin, password);
+        const repository = new AccountRepositoryInMemory()
+
+        repository.save(account)
+
+        const getedAccount = await repository.getByUsername(username)
+
+        expect(getedAccount).instanceOf(Account)
+        expect(getedAccount.username.getValue()).toBe(username)
+        expect(getedAccount.email.getValue()).toBe(email)
+        expect(getedAccount.isAdmin).toBe(isAdmin)
+        expect(getedAccount.name.getValue()).toBe(name)
+        expect(getedAccount.password.validate(password)).toBe(true)
+    })
 })
