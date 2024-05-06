@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "dev": "tsx watch src/server.ts",
     "start": ""
   },
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "@vitest/coverage-v8": "^1.6.0",
     "vitest": "^1.6.0"
   }
 }

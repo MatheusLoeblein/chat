@@ -6,7 +6,7 @@ export default class Email {
         this.value = email;
     }
 
-    getValue() {
+    getValue(): string {
         return this.value;
     }
 }

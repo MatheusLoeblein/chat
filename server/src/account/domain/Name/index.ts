@@ -6,7 +6,7 @@ export default class Name {
         this.value = name;
     }
 
-    getValue() {
+    getValue(): string {
         return this.value;
     }
 }
