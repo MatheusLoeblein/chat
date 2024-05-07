@@ -20,7 +20,6 @@ export class AccountRepositoryNoSql implements AccountRepository {
     }
     async getById(accountId: string): Promise<undefined | Account> {
         const account = await this.connection.find('account', { accountId: accountId })
-        console.log(account)
 
         if (!account) return
 
@@ -39,6 +38,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
 
     async getByEmail(email: string): Promise<undefined | Account> {
         const account = await this.connection.find('account', { email: email })
+
         if (!account) return
 
         return Account.restore(

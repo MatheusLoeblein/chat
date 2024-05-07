@@ -1,19 +1,17 @@
 import { MongoClient } from 'mongodb'
 import { NoSqlConnection } from '../Connection'
+import { DB_NAME, DB_HOST, DB_PORT } from '../../../../config/config'
+
 
 export class MongoDbAdapter implements NoSqlConnection {
-    testDB: boolean;
     connection: MongoClient;
 
-    constructor(testDB: boolean) {
-        this.testDB = testDB
-        this.connection = new MongoClient('mongodb://127.0.0.1:27017/myApp')
+    constructor() {
+        this.connection = new MongoClient(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`)
 
     }
     async find(collection: string, data: any): Promise<any> {
         const db = this.connection.db();
-
-        // await db.createIndex('account', { accountId: 1 }, { unique: true });
 
         const connection = db.collection(collection);
 
@@ -28,10 +26,10 @@ export class MongoDbAdapter implements NoSqlConnection {
         await connection.insertOne(data);
     }
 
-    async disconnect(cleanDb = ''): Promise<void> {
-        if (this.testDB) {
-            const collection = this.connection.db().collection(cleanDb)
-            await collection.deleteMany({})
+    async disconnect(): Promise<void> {
+
+        if(process.env.NODE_ENV === 'test'){
+            await this.connection.db().dropDatabase()
 
         }
         await this.connection.close();

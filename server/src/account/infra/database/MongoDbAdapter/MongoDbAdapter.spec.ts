@@ -21,6 +21,6 @@ describe('MongoDbAdapter', () => {
     })
 
     afterEach(async function () {
-        await mongoDbAdapter.disconnect('account')
+        await mongoDbAdapter.disconnect()
     })
 })
