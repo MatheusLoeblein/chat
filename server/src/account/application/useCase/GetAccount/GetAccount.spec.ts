@@ -2,9 +2,10 @@ import { describe, test, expect } from "vitest";
 import Account from "../../../domain/Account";
 import { AccountRepositoryInMemory } from "../../../infra/repository/AccountReposityInMemory";
 import { GetAccount } from ".";
+import { randomUUID } from 'crypto'
 
 describe('GetAccount UseCase', () => {
-    test('', async () => {
+    test('Should return account id if account exists', async () => {
         const username = 'JohnDoe';
         const name = 'John Doe';
         const email = 'john@example.com';
@@ -27,4 +28,20 @@ describe('GetAccount UseCase', () => {
         expect(accountData.isAdmin).toBe(account.isAdmin)
 
     })
+
+    test('Should be Error("Account not exists")', async () => {
+        const repository = new AccountRepositoryInMemory()
+
+        const getAccount = new GetAccount(repository)
+
+        const accountData = async () => {
+            await getAccount.execute(randomUUID())
+        }
+
+        await expect(accountData).rejects.toThrow(Error)
+        await expect(accountData).rejects.toThrowError('Account not exists')
+
+
+    })
+
 })

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { PBKDF2Password } from '.'
+import { PBKDF2Password, PasswordFactory } from '.'
 
 describe('Password PBKDF2 encripted', () => {
     test('create() Should', () => {
@@ -20,5 +20,18 @@ describe('Password PBKDF2 encripted', () => {
 
         expect(password).toBeInstanceOf(PBKDF2Password)
         expect(password.validate(myPass)).toBe(true)
+    })
+
+    test('PasswordFactory create pbkdf2 instance', () => {
+        const factory = PasswordFactory.create('pbkdf2')
+        expect(factory).toBe(PBKDF2Password)
+    })
+
+    test('PasswordFactory.create() return error from empty value', () => {
+        const factory = () => {
+            PasswordFactory.create('')
+        }
+
+        expect(factory).toThrow(Error)
     })
 })

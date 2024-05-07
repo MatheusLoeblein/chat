@@ -19,6 +19,7 @@ export class SignUp {
             accountInput.email,
             false,
             accountInput.password
+
         )
         await this.accountRepository.save(account)
 
