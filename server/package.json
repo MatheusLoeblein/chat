@@ -7,7 +7,7 @@
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/main.ts",
     "start": ""
   },
   "author": "Matheus Loeblein",
