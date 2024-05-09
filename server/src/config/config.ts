@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 
 config()
 
-const randomName = randomUUID().slice(0,4)
+const randomName = randomUUID().slice(0, 4)
 
 export const DB_HOST = process.env.DB_HOST
 export const DB_NAME = process.env.NODE_ENV === 'test' ? `${randomName}-test` : process.env.DB_NAME

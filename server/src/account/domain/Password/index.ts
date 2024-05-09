@@ -16,6 +16,7 @@ export class PBKDF2Password implements Password {
     }
 
     static create(password: string) {
+        if (password.length < 5) throw new Error("Invalid password");
         const salt = crypto.randomBytes(20).toString("hex");
         const value = crypto.pbkdf2Sync(password, salt, 100, 64, "sha512").toString("hex");
         return new PBKDF2Password(value, salt);

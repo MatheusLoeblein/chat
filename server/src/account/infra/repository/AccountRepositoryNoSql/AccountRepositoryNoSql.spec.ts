@@ -105,5 +105,6 @@ describe('Account no SQL Repository', () => {
 
     afterEach(async function () {
         await mongoDbAdapter.disconnect()
+
     })
 })

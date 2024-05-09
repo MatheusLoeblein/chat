@@ -23,9 +23,7 @@ export class SignUp {
         )
         await this.accountRepository.save(account)
 
-        return {
-            accountId: account.accountId
-        }
+        return { accountId: account.accountId }
     }
 }
 

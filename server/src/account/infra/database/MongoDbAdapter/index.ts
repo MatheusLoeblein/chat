@@ -28,7 +28,7 @@ export class MongoDbAdapter implements NoSqlConnection {
 
     async disconnect(): Promise<void> {
 
-        if(process.env.NODE_ENV === 'test'){
+        if (process.env.NODE_ENV === 'test') {
             await this.connection.db().dropDatabase()
 
         }
