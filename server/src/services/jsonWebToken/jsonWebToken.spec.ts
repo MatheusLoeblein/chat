@@ -11,10 +11,7 @@ describe('Tests from json web token', () => {
         }
 
         const token = JWTService.sign(user)
-
         const decoded: any = decode(token)
-
-        console.log(decoded)
 
         expect(decoded).toHaveProperty('iat')
         expect(decoded).toHaveProperty('accountId')

@@ -16,6 +16,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
             password: account.password.value,
             password_salt: account.password.salt,
             password_algorithm: account.password.algorithm,
+            cover: account.cover
         })
     }
     async getById(accountId: string): Promise<undefined | Account> {
@@ -33,6 +34,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.cover
         )
     }
 
@@ -51,6 +53,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.cover
         )
     }
 
@@ -68,6 +71,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.cover
         )
     }
 

@@ -4,7 +4,6 @@ import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountR
 import { GetAccount } from ".";
 import { randomUUID } from 'crypto'
 
-
 describe('GetAccount UseCase', () => {
     test('Should return account id if account exists', async () => {
         const username = 'JohnDoe';
@@ -41,8 +40,6 @@ describe('GetAccount UseCase', () => {
 
         await expect(accountData).rejects.toThrow(Error)
         await expect(accountData).rejects.toThrowError('Account not exists')
-
-
     })
 
 })
