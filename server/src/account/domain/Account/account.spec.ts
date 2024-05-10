@@ -37,7 +37,7 @@ describe('Account', () => {
         const passwordAlgorithm = 'pbkdf2';
         const salt = 'salt123';
 
-        const account = Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt);
+        const account = Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, 'cover');
 
         expect(account).toBeInstanceOf(Account);
         expect(account.accountId).toBe(accountId);
@@ -60,7 +60,8 @@ describe('Account', () => {
         const passwordAlgorithm = 'pbkdf2';
         const salt = 'salt123';
 
-        const account = () => Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt);
+
+        const account = () => Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, 'cover');
 
         expect(account).toThrow(Error);
         expect(account).toThrowError('UUID not valid!');

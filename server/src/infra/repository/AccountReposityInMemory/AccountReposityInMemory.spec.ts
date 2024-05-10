@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import Account from '../../../domain/Account';
+import Account from '../../../account/domain/Account';
 import { AccountRepositoryInMemory } from '.';
 
 describe('Account In Memory Repository', () => {

@@ -1,6 +1,8 @@
 import { describe, test, expect } from "vitest";
 import { SignUp } from ".";
-import { AccountRepositoryInMemory } from "../../../infra/repository/AccountReposityInMemory";
+import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountReposityInMemory";
+import { decode } from 'jsonwebtoken'
+
 
 describe('SignUp use case', () => {
     test('should be account', async () => {
@@ -16,9 +18,11 @@ describe('SignUp use case', () => {
 
         const signUp = new SignUp(accountRepository)
 
-        const { accountId } = await signUp.execute(input)
+        const jwt = await signUp.execute(input)
 
-        expect(accountId).toBe(accountRepository.accounts[0].accountId)
+        const decoded: any = decode(jwt)
+
+        expect(decoded.accountId).toBe(accountRepository.accounts[0].accountId)
 
     })
 

@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import Account from "../../../domain/Account";
-import { AccountRepositoryInMemory } from "../../../infra/repository/AccountReposityInMemory";
+import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountReposityInMemory";
 import { GetAccount } from ".";
 import { randomUUID } from 'crypto'
 

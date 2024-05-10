@@ -1,8 +1,8 @@
 import HttpServer from "../HttpServer";
-import { AccountRepository } from '../../../application/repository/AccountRepository'
-import { GetAccount } from "../../../application/useCase/GetAccount";
+import { AccountRepository } from '../../../account/application/repository/AccountRepository'
+import { GetAccount } from "../../../account/application/useCase/GetAccount";
 import { Router } from "./inteface";
-import { SignUp } from "../../../application/useCase/SignUp";
+import { SignUp } from "../../../account/application/useCase/SignUp";
 
 
 export class AccountRouter implements Router {
@@ -11,7 +11,6 @@ export class AccountRouter implements Router {
     }
 
     async init() {
-
 
         this.httpServer?.on("post", "/signup", async (params: any, body: any) => {
             const signUp = new SignUp(this.AccountRepository)

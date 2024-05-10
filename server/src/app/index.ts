@@ -1,6 +1,6 @@
-import { Connection } from "../account/infra/database/Connection";
-import HttpServer from "../account/infra/http/HttpServer";
-import { Routers } from "../../src/account/infra/http/Routes";
+import { Connection } from "../infra/database/Connection";
+import HttpServer from "../infra/http/HttpServer";
+import { Routers } from "../infra/http/Routes";
 
 
 export class AppManager {

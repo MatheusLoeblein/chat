@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 import { NoSqlConnection } from '../Connection'
-import { DB_NAME, DB_HOST, DB_PORT } from '../../../../config/config'
+import { DB_NAME, DB_HOST, DB_PORT } from '../../../config/config'
 
 
 export class MongoDbAdapter implements NoSqlConnection {

@@ -1,5 +1,5 @@
-import { AccountRepository } from '../../../application/repository/AccountRepository'
-import Account from '../../../domain/Account'
+import { AccountRepository } from '../../../account/application/repository/AccountRepository'
+import Account from '../../../account/domain/Account'
 import { NoSqlConnection } from '../../database/Connection'
 
 export class AccountRepositoryNoSql implements AccountRepository {

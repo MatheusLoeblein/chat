@@ -1,5 +1,5 @@
 import { describe, test, expect, afterEach, beforeEach } from 'vitest'
-import Account from '../../../domain/Account';
+import Account from '../../../account/domain/Account';
 import { AccountRepositoryNoSql } from '.';
 import { MongoDbAdapter } from '../../database/MongoDbAdapter';
 

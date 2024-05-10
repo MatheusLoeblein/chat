@@ -1,10 +1,11 @@
 import Account from "../../../domain/Account";
 import { AccountRepository } from "../../repository/AccountRepository";
+import { JWTService } from '../../../../services/jsonWebToken'
 
 export class SignUp {
     constructor(readonly accountRepository: AccountRepository) { }
 
-    async execute(accountInput: AccountInput): Promise<{ accountId: string }> {
+    async execute(accountInput: AccountInput): Promise<string | Error> {
 
         const existingUsername = await this.accountRepository.getByUsername(accountInput.username)
         const existingEmail = await this.accountRepository.getByEmail(accountInput.email)
@@ -18,12 +19,13 @@ export class SignUp {
             accountInput.name,
             accountInput.email,
             false,
-            accountInput.password
-
+            accountInput.password,
+            accountInput.cover ? accountInput.cover : null
         )
         await this.accountRepository.save(account)
 
-        return { accountId: account.accountId }
+
+        return JWTService.sign({ accountId: account.accountId })
     }
 }
 
@@ -32,4 +34,5 @@ interface AccountInput {
     name: string,
     email: string,
     password: string
+    cover?: string
 }

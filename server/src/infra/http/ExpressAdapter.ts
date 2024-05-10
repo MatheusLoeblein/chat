@@ -3,7 +3,6 @@ import HttpServer from "./HttpServer";
 import cors from "cors";
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
-
 // framework and driver
 export default class ExpressAdapter implements HttpServer {
     app: any;
@@ -14,6 +13,7 @@ export default class ExpressAdapter implements HttpServer {
         this.app = express();
         this.app.use(express.json());
         this.app.use(cors());
+        this.app.use('/static', express.static(__dirname + '/../../../public'));
         this.server = createServer(this.app)
         this.io = new Server(this.server, { cors: { origin: 'http://localhost:3000' } })
     }

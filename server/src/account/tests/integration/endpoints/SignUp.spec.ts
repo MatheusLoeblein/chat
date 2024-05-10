@@ -1,12 +1,14 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest'
-import { MongoDbAdapter } from '../../../infra/database/MongoDbAdapter';
+import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
 import { AppManager } from '../../../../app';
-import ExpressAdapter from '../../../infra/http/ExpressAdapter';
-import { Routers } from '../../../infra/http/Routes';
-import { AccountRouter } from '../../../infra/http/Routes/Router';
-import { AccountRepositoryNoSql } from '../../../infra/repository/AccountRepositoryNoSql';
+import ExpressAdapter from '../../../../infra/http/ExpressAdapter';
+import { Routers } from '../../../../infra/http/Routes';
+import { AccountRouter } from '../../../../infra/http/Routes/Router';
+import { AccountRepositoryNoSql } from '../../../../infra/repository/AccountRepositoryNoSql';
 import axios from 'axios';
 import { randomInt } from 'crypto'
+
+import { decode } from 'jsonwebtoken'
 
 
 
@@ -37,8 +39,10 @@ describe('SignUp Intergration test', () => {
 
         const response = await axios.post(`http://localhost:${port}/signup/`, data)
 
+        const decoded = decode(response.data)
+
         expect(response.status).toBe(201)
-        expect(response.data).toHaveProperty('accountId')
+        expect(decoded).toHaveProperty('accountId')
     })
 
     test('Should be account id on send data on empty username', async () => {
