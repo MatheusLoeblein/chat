@@ -6,6 +6,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
     constructor(readonly connection: NoSqlConnection) { }
 
     async save(account: Account): Promise<void> {
+
         await this.connection.insert('account', {
             accountId: account.accountId,
             username: account.username.getValue(),

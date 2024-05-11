@@ -1,27 +1,23 @@
 import Message from "../Message";
 import Sender from "../Sender";
 
-export enum RoomType {
-    PRIVATE = 'private',
-    GROUP = 'group',
-}
 
 export default class Room {
     private constructor(
         readonly roomId: string,
-        readonly roomType: RoomType,
+        readonly roomType: 'private' | 'group',
         public members: Sender[],
         public messagens: Message[],
         public admins: Sender[],
     ) { }
 
-    static create(roomType: RoomType, members: Sender[], admins: Sender[] = []) {
+    static create(roomType: 'private' | 'group', members: Sender[], admins: Sender[] = []) {
         const roomId = crypto.randomUUID()
 
         return new Room(roomId, roomType, members, [], admins)
     }
 
-    static restore(roomId: string, roomType: RoomType, members: any[], messagens: any[], admins: any[]) {
+    static restore(roomId: string, roomType: 'private' | 'group', members: any[], messagens: any[], admins: any[]) {
 
         const convertedMembers = members.map((user) => new Sender(user.accountId, user.name, user.cover))
         const convertedAdmins = admins.map((user) => new Sender(user.accountId, user.name, user.cover))
@@ -39,4 +35,13 @@ export default class Room {
         return new Room(roomId, roomType, convertedMembers, convertedMessagens, convertedAdmins)
     }
 
+    getMessageValues() {
+        return this.messagens.map((message) => message.getValues())
+    }
+
+    pushMessage(Message: Message) {
+        this.messagens.push(Message)
+    }
+
 }
+

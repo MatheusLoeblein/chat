@@ -10,20 +10,34 @@ export class MongoDbAdapter implements NoSqlConnection {
         this.connection = new MongoClient(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`)
 
     }
+
+    async insert(collection: string, data: any): Promise<any> {
+        const currentCollection = this.getCollection(collection)
+
+        await currentCollection.insertOne(data);
+    }
+
     async find(collection: string, data: any): Promise<any> {
-        const db = this.connection.db();
+        const currentCollection = this.getCollection(collection)
 
-        const connection = db.collection(collection);
-
-        const result = await connection.findOne(data);
+        const result = await currentCollection.findOne(data);
 
         return result
     }
-    async insert(collection: string, data: any): Promise<any> {
-        const db = this.connection.db();
-        const connection = db.collection(collection);
 
-        await connection.insertOne(data);
+    findMany(collection: string, filter: any): any {
+        const currentCollection = this.getCollection(collection)
+
+        const result = currentCollection.find(filter);
+
+        return result
+    }
+
+
+    async update(collection: string, filter: any, data: any): Promise<any> {
+        const currentCollection = this.getCollection(collection)
+
+        await currentCollection.updateOne(filter, data)
     }
 
     async disconnect(): Promise<void> {
@@ -33,5 +47,12 @@ export class MongoDbAdapter implements NoSqlConnection {
 
         }
         await this.connection.close();
+    }
+
+    private getCollection(collectionName: string) {
+        const db = this.connection.db();
+        const collection = db.collection(collectionName);
+
+        return collection
     }
 }

@@ -20,7 +20,7 @@ export default class Sender {
 }
 
 
-interface SenderValues {
+export interface SenderValues {
     accountId: string
     name: string
     cover: string

@@ -1,4 +1,4 @@
-import Sender from "../Sender";
+import Sender, { SenderValues } from "../Sender";
 
 export default class Message {
     private constructor(
@@ -20,4 +20,21 @@ export default class Message {
 
         return new Message(messageId, new Sender(senderId, senderName, senderCover), content, date)
     }
+
+    getValues(): MessageValues {
+        return {
+            messageId: this.messageId,
+            sender: this.sender.getValues(),
+            content: this.content,
+            date: this.date
+        }
+    }
+}
+
+
+interface MessageValues {
+    messageId: string,
+    sender: SenderValues,
+    content: string,
+    date: Date
 }
