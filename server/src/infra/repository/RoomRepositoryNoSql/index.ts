@@ -38,18 +38,15 @@ export class RoomRepositoryNoSql implements RoomRepository {
         return room
     }
 
-    getRoomsByAccount(accountId: string): undefined | Room[] {
-        const rooms = this.connection.findMany('room', {
-            members: {
-                $elemMatch: {
-                    accountId: accountId
-                }
-            }
-        });
+    async getRoomsByAccount(accountId: string): Promise<undefined | Room[]> {
+        const rooms =  await this.connection.findMany(
+            'room', { 
+                members: { $elemMatch: { accountId: accountId } },
+            }).sort({ 'messages.date': -1 }).toArray()
+
 
         const roomsData: Room[] = rooms.map((roomData: any) => {
-
-            return Room.restore(roomData.roomId, roomData.roomType, roomData.members, roomData.admins, roomData.messages);
+            return Room.restore(roomData.roomId, roomData.roomType, roomData.members, roomData.messages, roomData.admins);
         });
 
         return roomsData
@@ -59,5 +56,6 @@ export class RoomRepositoryNoSql implements RoomRepository {
         await this.connection.update('room', { roomId: roomId }, { $set: field });
     }
 
+    
 }
 

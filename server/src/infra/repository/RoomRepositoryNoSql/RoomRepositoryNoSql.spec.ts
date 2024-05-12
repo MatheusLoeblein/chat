@@ -5,11 +5,14 @@ import { MongoDbAdapter } from '../../database/MongoDbAdapter';
 import Room from '../../../chat/domain/Room';
 import Sender from '../../../chat/domain/Sender';
 import Message from '../../../chat/domain/Message';
+import { exec } from 'child_process';
 
 
 let mongoDbAdapter: MongoDbAdapter
 let repository: RoomRepositoryNoSql
 let rooms: Room[]
+
+let mainSender: Sender;
 
 describe('Account no SQL Repository', () => {
 
@@ -17,20 +20,27 @@ describe('Account no SQL Repository', () => {
         mongoDbAdapter = new MongoDbAdapter()
         repository = new RoomRepositoryNoSql(mongoDbAdapter)
 
-        const sender = new Sender('sender1', 'Meu Nome', '/pathToCover')
+        mainSender = new Sender('sender1', 'Meu Nome', '/pathToCover')
         const sender2 = new Sender('sender2', 'Meu Nome2', '/pathToCover2')
 
         const sender3 = new Sender('sender1', 'Meu Nome', '/pathToCover')
         const sender4 = new Sender('sender2', 'Meu Nome2', '/pathToCover2')
 
-        const message = Message.create(sender, 'test message')
-        const message2 = Message.create(sender, 'test message')
-        const message3 = Message.create(sender, 'test message')
-        const message4 = Message.create(sender, 'test message')
-        const message5 = Message.create(sender, 'test message')
+        const message = Message.create(mainSender, 'message')
+        const message2 = Message.create(sender2, 'test message2')
+        const message3 = Message.create(sender3, 'test message3')
+        const message4 = Message.create(sender4, 'test message4')
+        const message5 = Message.create(mainSender, 'test message5')
 
-        const room = Room.create('private', [sender, sender2])
-        const room2 = Room.create('private', [sender3, sender4])
+        const room = Room.create('private', [mainSender, sender2])
+
+        room.pushMessage(message)
+        room.pushMessage(message2)
+        room.pushMessage(message3)
+        room.pushMessage(message4)
+        room.pushMessage(message5)
+        
+        const room2 = Room.create('private', [mainSender, sender3, sender4])
 
         rooms = [room, room2]
 
@@ -44,13 +54,9 @@ describe('Account no SQL Repository', () => {
 
         const room = Room.create('private', [sender, sender2])
 
-        const message = Message.create(sender, 'test message')
-
         await repository.createRoom(room)
 
         const result = await repository.getRoom(room.roomId)
-
-        console.log(result)
 
         expect(result.roomId).toBe(room.roomId)
         expect(result.roomType).toBe(room.roomType)
@@ -73,28 +79,20 @@ describe('Account no SQL Repository', () => {
 
         const result = await repository.getRoom(room.roomId)
 
-        console.log(result)
-
     })
 
-    // test('create() and get() room should be add room and return valid room', async () => {
-    //     const sender = new Sender('my-id', 'Meu Nome', '/pathToCover')
-    //     const sender2 = new Sender('my-id2', 'Meu Nome2', '/pathToCover2')
+    test('getRoomsByAccount shoud be ordened list rooms per last message', async () => {
+        const message = Message.create(mainSender, 'message')
+        
+        rooms[1].pushMessage(message)
 
-    //     const room = Room.create('private', [sender, sender2])
+        repository.update(rooms[1].roomId, { messages: rooms[1].getMessageValues() })
 
-    //     const message = Message.create(sender, 'test message')
+        const roomsData = await repository.getRoomsByAccount(mainSender.accountId)
 
-    //     await repository.createRoom(room)
-
-    //     const result = await repository.getRoom(room.roomId)
-
-    //     console.log(result)
-
-    //     expect(result.roomId).toBe(room.roomId)
-    //     expect(result.roomType).toBe(room.roomType)
-    //     expect(result.members.map((sender) => sender.getValues())).toStrictEqual(room.members.map((sender) => sender.getValues()))
-    // })
+        expect(roomsData[0].roomId).toBe(rooms[1].roomId)
+        expect(roomsData[1].roomId).toBe(rooms[0].roomId)
+    })
 
     afterEach(async function () {
         await mongoDbAdapter.disconnect()

@@ -10,14 +10,12 @@ import { randomInt } from 'crypto'
 
 import { decode } from 'jsonwebtoken'
 
-
-
 describe('SignUp Intergration test', () => {
     let App: AppManager;
     let port: number = 7456
 
     beforeEach(async () => {
-        port = randomInt(1, 30000)
+        port = randomInt(49152, 65535)
         const connection = new MongoDbAdapter();
         const accountRepository = new AccountRepositoryNoSql(connection);
         const httpServer = new ExpressAdapter();
@@ -35,10 +33,7 @@ describe('SignUp Intergration test', () => {
             email: 'matheus@ttest.com',
             password: '123456',
         }
-
-
         const response = await axios.post(`http://localhost:${port}/signup/`, data)
-
         const decoded = decode(response.data)
 
         expect(response.status).toBe(201)
@@ -63,7 +58,6 @@ describe('SignUp Intergration test', () => {
             expect(e.response.status).toBe(422)
             expect(e.response.data.message).toBe('Invalid username')
         }
-
     })
 
     test('Should be account id on send data on empty name', async () => {

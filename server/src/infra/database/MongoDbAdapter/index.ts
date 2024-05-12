@@ -1,6 +1,7 @@
-import { MongoClient } from 'mongodb'
+import { FindCursor, MongoClient } from 'mongodb'
 import { NoSqlConnection } from '../Connection'
 import { DB_NAME, DB_HOST, DB_PORT } from '../../../config/config'
+import { CursorPos } from 'readline';
 
 
 export class MongoDbAdapter implements NoSqlConnection {
@@ -25,7 +26,7 @@ export class MongoDbAdapter implements NoSqlConnection {
         return result
     }
 
-    findMany(collection: string, filter: any): any {
+    findMany(collection: string, filter: any): FindCursor {
         const currentCollection = this.getCollection(collection)
 
         const result = currentCollection.find(filter);
