@@ -13,7 +13,6 @@ export class AppManager {
     }
 
     async start(port: number) {
-
         await Routers.startRouters()
         this.httpServer.listen(port)
     }
@@ -21,6 +20,5 @@ export class AppManager {
     async close() {
         await this.connection.disconnect()
         this.httpServer.close()
-
     }
 }

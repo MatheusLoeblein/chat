@@ -1,11 +1,10 @@
 import { describe, test, expect, afterEach, beforeEach } from 'vitest'
-import Account from '../../../account/domain/Account';
+
 import { RoomRepositoryNoSql } from '.';
 import { MongoDbAdapter } from '../../database/MongoDbAdapter';
 import Room from '../../../chat/domain/Room';
 import Sender from '../../../chat/domain/Sender';
 import Message from '../../../chat/domain/Message';
-import { exec } from 'child_process';
 
 
 let mongoDbAdapter: MongoDbAdapter

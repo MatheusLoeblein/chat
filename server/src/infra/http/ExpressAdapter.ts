@@ -3,6 +3,7 @@ import HttpServer from "./HttpServer";
 import cors from "cors";
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
+import { JWTService } from "../../services/jsonWebToken";
 // framework and driver
 export default class ExpressAdapter implements HttpServer {
     app: any;
@@ -18,9 +19,13 @@ export default class ExpressAdapter implements HttpServer {
         this.io = new Server(this.server, { cors: { origin: 'http://localhost:3000' } })
     }
 
-    on(method: string, url: string, callback: Function): void {
+    on(method: string, url: string, callback: Function, privateRoute: boolean): void {
         this.app[method](url, async function (req: Request, res: Response) {
             try {
+
+                if(privateRoute){
+                    JWTService.verify(req.headers.authorization)
+                }
 
                 const statusCode = req.method === 'POST' ? 201 : 200
                 const output = await callback(req.params, req.body);

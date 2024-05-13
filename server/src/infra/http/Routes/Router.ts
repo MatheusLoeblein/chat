@@ -3,6 +3,7 @@ import { AccountRepository } from '../../../account/application/repository/Accou
 import { GetAccount } from "../../../account/application/useCase/GetAccount";
 import { Router } from "./inteface";
 import { SignUp } from "../../../account/application/useCase/SignUp";
+import { SignIn } from "../../../account/application/useCase/SignIn";
 
 
 export class AccountRouter implements Router {
@@ -16,15 +17,21 @@ export class AccountRouter implements Router {
             const signUp = new SignUp(this.AccountRepository)
             const output = signUp.execute(body)
             return output;
-        });
+        }, false);
+
+        this.httpServer?.on("post", "/signin", async (params: any, body: any) => {
+            const usecase = new SignIn(this.AccountRepository)
+            const account = await usecase.execute(body)
+
+            return account;
+        }, false);
 
         this.httpServer?.on("get", "/accounts/:accountId", async (params: any, body: any) => {
-
             const getAccount = new GetAccount(this.AccountRepository)
             const account = await getAccount.execute(params.accountId)
 
             return account;
-        });
+        }, true);
     }
 }
 

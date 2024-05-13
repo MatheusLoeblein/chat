@@ -22,7 +22,7 @@ describe('SignUp Intergration test', () => {
         const accountRouter = new AccountRouter(httpServer, accountRepository);
         Routers.registerRouter(accountRouter)
         App = new AppManager(connection, httpServer)
-        App.start(port)
+        await App.start(port)
     })
 
     test('Should be account id on send full data', async () => {
@@ -124,6 +124,6 @@ describe('SignUp Intergration test', () => {
     })
 
     afterEach(async () => {
-        App.close()
+        await App.close()
     })
 })

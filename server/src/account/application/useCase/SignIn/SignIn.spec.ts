@@ -27,7 +27,8 @@ describe('SignIn Use Case', () => {
 
         signIn = new SignIn(repository)
     })
-    test('Should by valid token from authentication', async () => {
+
+    test('Should be valid token from authentication', async () => {
 
         const token = await signIn.execute({ username: username, password: password })
 
@@ -36,4 +37,40 @@ describe('SignIn Use Case', () => {
         expect(decoded.accountId).toBe(account.accountId)
 
     })
+
+    test('Should be Error() on send invalid credentials  ', async () => {
+        try {
+            await signIn.execute({ username: 'invalid', password: 'invalid' })
+            throw new Error('')
+        }
+
+        catch(e){
+            expect(e.message).toBe('Credentials Invalid')
+        }
+    })
+
+    test('Should be Error() on send invalid password  ', async () => {
+        try {
+            await signIn.execute({ username: username, password: 'invalid' })
+            throw new Error('')
+        }
+
+        catch(e){
+            expect(e.message).toBe('Credentials Invalid')
+        }
+    })
+
+    test('Should be Error() on enpty account data ', async () => {
+        try {
+            //@ts-ignore
+            await signIn.execute()
+            throw new Error('')
+        }
+
+        catch(e){
+            expect(e.message).toBe('Credentials Invalid')
+        }
+    })
+
+
 })
