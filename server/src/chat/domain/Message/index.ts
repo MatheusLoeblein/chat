@@ -32,7 +32,7 @@ export default class Message {
 }
 
 
-interface MessageValues {
+export interface MessageValues {
     messageId: string,
     sender: SenderValues,
     content: string,

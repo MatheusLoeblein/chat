@@ -1,5 +1,5 @@
-import Message from "../Message";
-import Sender from "../Sender";
+import Message, { MessageValues } from "../Message";
+import Sender, { SenderValues } from "../Sender";
 
 
 export default class Room {
@@ -35,13 +35,32 @@ export default class Room {
         return new Room(roomId, roomType, convertedMembers, convertedMessagens, convertedAdmins)
     }
 
-    getMessageValues() {
+    getMessageValues(): MessageValues[] {
         return this.messagens.map((message) => message.getValues())
+    }
+
+    getMembersValues(): SenderValues[]{
+        return this.members.map((member) => member.getValues())
+    }
+
+    getAdminsValues(): SenderValues[]{
+        return this.admins.map((admin) => admin.getValues())
     }
 
     pushMessage(Message: Message) {
         this.messagens.push(Message)
     }
 
+    getValues():RoomValues {
+        return {
+            roomId: this.roomId,
+            roomType: this.roomType,
+        }
+    }
+}
+
+export interface RoomValues{
+    roomId: string;
+    roomType: string;
 }
 
