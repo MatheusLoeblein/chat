@@ -4,7 +4,8 @@ import cors from "cors";
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
 import { JWTService } from "../../services/jsonWebToken";
-// framework and driver
+
+
 export default class ExpressAdapter implements HttpServer {
     app: any;
     server: any

@@ -1,10 +1,20 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, beforeEach } from "vitest";
 import { SignUp } from ".";
 import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountReposityInMemory";
 import { decode } from 'jsonwebtoken'
+import Registry from "../../../../DI/registry";
+
 
 
 describe('SignUp use case', () => {
+    let accountRepository: AccountRepositoryInMemory;
+
+    beforeEach(async () => {
+
+        accountRepository = new AccountRepositoryInMemory()
+        Registry.getInstance().provide('accountRepository', accountRepository)
+    })
+
     test('should be account', async () => {
 
         const input = {
@@ -14,9 +24,8 @@ describe('SignUp use case', () => {
             password: 'password123'
         }
 
-        const accountRepository = new AccountRepositoryInMemory()
 
-        const signUp = new SignUp(accountRepository)
+        const signUp = new SignUp()
 
         const jwt = await signUp.execute(input)
 
@@ -35,9 +44,9 @@ describe('SignUp use case', () => {
             password: 'password123'
         }
 
-        const accountRepository = new AccountRepositoryInMemory()
 
-        const signUp = new SignUp(accountRepository)
+
+        const signUp = new SignUp()
 
         await signUp.execute(input)
 
@@ -61,10 +70,7 @@ describe('SignUp use case', () => {
             password: 'password123'
         }
 
-        const accountRepository = new AccountRepositoryInMemory()
-
-        const signUp = new SignUp(accountRepository)
-
+        const signUp = new SignUp()
         await signUp.execute(input)
 
         const accountTwo = async () => {

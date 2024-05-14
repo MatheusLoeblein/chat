@@ -1,7 +1,6 @@
 import { FindCursor, MongoClient } from 'mongodb'
 import { NoSqlConnection } from '../Connection'
 import { DB_NAME, DB_HOST, DB_PORT } from '../../../config/config'
-import { CursorPos } from 'readline';
 
 
 export class MongoDbAdapter implements NoSqlConnection {
@@ -42,10 +41,8 @@ export class MongoDbAdapter implements NoSqlConnection {
     }
 
     async disconnect(): Promise<void> {
-
         if (process.env.NODE_ENV === 'test') {
             await this.connection.db().dropDatabase()
-
         }
         await this.connection.close();
     }

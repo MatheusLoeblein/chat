@@ -3,6 +3,7 @@ import Account from "../../../domain/Account";
 import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountReposityInMemory";
 import { SignIn } from '.';
 import { decode } from 'jsonwebtoken'
+import Registry from '../../../../DI/registry';
 
 
 describe('SignIn Use Case', () => {
@@ -11,7 +12,7 @@ describe('SignIn Use Case', () => {
     let password: string;
     let signIn: SignIn;
     let account: Account;
-    let repository: AccountRepositoryInMemory;
+    let accountRepository: AccountRepositoryInMemory;
 
     beforeEach(async () => {
         username = 'JohnDoe';
@@ -21,11 +22,12 @@ describe('SignIn Use Case', () => {
         const isAdmin = false;
 
         account = Account.create(username, name, email, isAdmin, password);
-        repository = new AccountRepositoryInMemory()
+        accountRepository = new AccountRepositoryInMemory()
 
-        repository.save(account)
+        accountRepository.save(account)
 
-        signIn = new SignIn(repository)
+        Registry.getInstance().provide('accountRepository', accountRepository)
+        signIn = new SignIn()
     })
 
     test('Should be valid token from authentication', async () => {

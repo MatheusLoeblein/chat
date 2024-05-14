@@ -1,13 +1,15 @@
 import { AccountRepository } from "../../repository/AccountRepository";
 import { JWTService } from '../../../../services/jsonWebToken'
+import { inject } from "../../../../DI/inject";
 
 export class SignIn {
-    constructor(readonly accountRepository: AccountRepository) { }
+    @inject('accountRepository')
+    accountRepository?: AccountRepository
 
     async execute(credentials: Credentials) {
         if (!credentials) throw new Error('Credentials Invalid')
 
-        const account = await this.accountRepository.getByUsername(credentials.username)
+        const account = await this.accountRepository?.getByUsername(credentials.username)
 
         if (!account) throw new Error('Credentials Invalid')
 

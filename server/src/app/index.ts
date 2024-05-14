@@ -1,6 +1,6 @@
 import { Connection } from "../infra/database/Connection";
 import HttpServer from "../infra/http/HttpServer";
-import { Routers } from "../infra/http/Routes";
+import { ControllerManager } from "../infra/http/Controllers";
 
 
 export class AppManager {
@@ -13,7 +13,7 @@ export class AppManager {
     }
 
     async start(port: number) {
-        await Routers.startRouters()
+        await ControllerManager.getInstance().startRouters()
         this.httpServer.listen(port)
     }
 

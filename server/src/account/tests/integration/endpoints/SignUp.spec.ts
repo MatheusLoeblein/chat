@@ -1,32 +1,45 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest'
+import { describe, test, expect, beforeEach, afterEach, afterAll } from 'vitest'
 import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
 import { AppManager } from '../../../../app';
 import ExpressAdapter from '../../../../infra/http/ExpressAdapter';
-import { Routers } from '../../../../infra/http/Routes';
-import { AccountRouter } from '../../../../infra/http/Routes/Router';
+import { ControllerManager } from '../../../../infra/http/Controllers';
+import { AccountController } from '../../../../infra/http/Controllers/AccountController';
 import { AccountRepositoryNoSql } from '../../../../infra/repository/AccountRepositoryNoSql';
 import axios from 'axios';
 import { randomInt } from 'crypto'
 
 import { decode } from 'jsonwebtoken'
+import Registry from '../../../../DI/registry';
+import { SignUp } from '../../../application/useCase/SignUp';
 
 describe('SignUp Intergration test', () => {
     let App: AppManager;
     let port: number = 7456
 
     beforeEach(async () => {
-        port = randomInt(49152, 65535)
+        port = randomInt(7456, 7556)
         const connection = new MongoDbAdapter();
         const accountRepository = new AccountRepositoryNoSql(connection);
         const httpServer = new ExpressAdapter();
-        const accountRouter = new AccountRouter(httpServer, accountRepository);
-        Routers.registerRouter(accountRouter)
+
+        const signUp = new SignUp()
+
+        Registry.getInstance().provide('accountRepository', accountRepository)
+        Registry.getInstance().provide('signUp', signUp)
+        Registry.getInstance().provide('httpServer', httpServer)
+
+        const accountController = new AccountController();
+        
+        ControllerManager.getInstance().registerRouter(accountController)
+        
         App = new AppManager(connection, httpServer)
         await App.start(port)
+
+
+
     })
 
     test('Should be account id on send full data', async () => {
-
         const data = {
             username: 'Matheus',
             name: 'Matheus Eduardo',
@@ -125,5 +138,6 @@ describe('SignUp Intergration test', () => {
 
     afterEach(async () => {
         await App.close()
+        
     })
 })

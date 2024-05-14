@@ -1,23 +1,32 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, beforeEach } from "vitest";
 import Account from "../../../domain/Account";
 import { AccountRepositoryInMemory } from "../../../../infra/repository/AccountReposityInMemory";
 import { GetAccount } from ".";
 import { randomUUID } from 'crypto'
+import Registry from "../../../../DI/registry";
 
 describe('GetAccount UseCase', () => {
-    test('Should return account id if account exists', async () => {
+    let account: Account
+
+    beforeEach(async () => {
+
         const username = 'JohnDoe';
         const name = 'John Doe';
         const email = 'john@example.com';
         const isAdmin = false;
         const password = 'password123';
 
-        const account = Account.create(username, name, email, isAdmin, password);
+        account = Account.create(username, name, email, isAdmin, password);
         const repository = new AccountRepositoryInMemory()
+
+        Registry.getInstance().provide('accountRepository', repository)
 
         repository.save(account)
 
-        const getAccount = new GetAccount(repository)
+    })
+
+    test('Should return account id if account exists', async () => {
+        const getAccount = new GetAccount()
 
         const accountData = await getAccount.execute(account.accountId)
 
@@ -30,9 +39,8 @@ describe('GetAccount UseCase', () => {
     })
 
     test('Should be Error("Account not exists")', async () => {
-        const repository = new AccountRepositoryInMemory()
 
-        const getAccount = new GetAccount(repository)
+        const getAccount = new GetAccount()
 
         const accountData = async () => {
             await getAccount.execute(randomUUID())

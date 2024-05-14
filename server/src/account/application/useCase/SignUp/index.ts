@@ -1,14 +1,16 @@
 import Account from "../../../domain/Account";
 import { AccountRepository } from "../../repository/AccountRepository";
 import { JWTService } from '../../../../services/jsonWebToken'
+import { inject } from "../../../../DI/inject";
 
 export class SignUp {
-    constructor(readonly accountRepository: AccountRepository) { }
+    @inject('accountRepository')
+    accountRepository?: AccountRepository
 
     async execute(accountInput: AccountInput): Promise<string | Error> {
 
-        const existingUsername = await this.accountRepository.getByUsername(accountInput.username)
-        const existingEmail = await this.accountRepository.getByEmail(accountInput.email)
+        const existingUsername = await this.accountRepository?.getByUsername(accountInput.username)
+        const existingEmail = await this.accountRepository?.getByEmail(accountInput.email)
 
         if (existingUsername) throw new Error('Username already exists')
 

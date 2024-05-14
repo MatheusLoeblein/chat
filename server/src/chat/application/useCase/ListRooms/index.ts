@@ -1,6 +1,6 @@
 import { AccountRepository } from "../../../../account/application/repository/AccountRepository";
 import { RoomRepository } from "../../repository";
-import inject from "../../../../DI/inject";
+import { inject } from "../../../../DI/inject";
 
 
 export class ListRooms {
@@ -13,11 +13,11 @@ export class ListRooms {
 
     async execute(accountId: string) {
 
-        const account = await this.accountRepository.getById(accountId)
+        const account = await this.accountRepository?.getById(accountId)
 
         if (!account) throw new Error('AccountId invalid')
 
-        const rooms = await this.roomRepository.getRoomsByAccount(account.accountId)
+        const rooms = await this.roomRepository?.getRoomsByAccount(account.accountId)
 
         const roomSerializer = rooms.map(
             room => {
