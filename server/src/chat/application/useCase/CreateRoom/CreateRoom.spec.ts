@@ -6,6 +6,7 @@ import { AccountRepositoryNoSql } from '../../../../infra/repository/AccountRepo
 import { RoomRepositoryNoSql } from '../../../../infra/repository/RoomRepositoryNoSql';
 import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
 import { CreatePrivateRoom } from '.';
+import Registry from '../../../../DI/registry';
 
 describe('CreatePrivateRoom Use Case', () => {
     let accounts: Account[] = []
@@ -27,10 +28,13 @@ describe('CreatePrivateRoom Use Case', () => {
         accountRepository = new AccountRepositoryNoSql(connection)
         roomRepository = new RoomRepositoryNoSql(connection)
 
+        Registry.getInstance().provide("accountRepository", accountRepository);
+        Registry.getInstance().provide("roomRepository", roomRepository);
+
         await accountRepository.save(account1)
         await accountRepository.save(account2)
 
-        createPrivateRoomUseCase = new CreatePrivateRoom(accountRepository, roomRepository)
+        createPrivateRoomUseCase = new CreatePrivateRoom()
     })
 
     test('Should be create account private room and return roomId', async () => {
@@ -43,22 +47,23 @@ describe('CreatePrivateRoom Use Case', () => {
         expect(currentRoom.members[0].accountId).toBe(accounts[0].accountId)
         expect(currentRoom.members[1].accountId).toBe(accounts[1].accountId)
 
+
     })
     test('Should be error send invalid first arg', async () => {
-        try{
+        try {
             await createPrivateRoomUseCase.execute('', accounts[1].accountId)
             throw new Error('FAIL')
         }
-        catch (e){
+        catch (e) {
             expect(e.message).toBe('First acccountId invalid')
         }
     })
     test('Should be error send invalid second arg', async () => {
-        try{
+        try {
             await createPrivateRoomUseCase.execute(accounts[0].accountId, '')
             throw new Error('FAIL')
         }
-        catch (e){
+        catch (e) {
             expect(e.message).toBe('Second acccountId invalid')
         }
     })
