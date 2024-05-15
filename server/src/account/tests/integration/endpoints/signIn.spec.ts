@@ -1,9 +1,9 @@
 import { describe, test, expect, afterAll, beforeAll } from 'vitest'
 import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
-import { AppManager } from '../../../../app';
+import { AppTest } from '../../../../app';
 import ExpressAdapter from '../../../../infra/http/ExpressAdapter';
-import { ControllerManager, Routers } from '../../../../infra/http/Controllers';
-import { AccountController, AccountRouter } from '../../../../infra/http/Controllers/AccountController';
+import { ControllerManager } from '../../../../infra/http/Controllers';
+import { AccountController } from '../../../../infra/http/Controllers/AccountController';
 import { AccountRepositoryNoSql } from '../../../../infra/repository/AccountRepositoryNoSql';
 import axios from 'axios';
 import { randomInt } from 'crypto'
@@ -15,29 +15,18 @@ import { SignIn } from '../../../application/useCase/SignIn';
 
 
 describe('SignUp Intergration test', () => {
-    let App: AppManager;
+    let App: AppTest;
     let port: number = 7456
     let account:Account
 
     beforeAll(async () => {
         const connection = new MongoDbAdapter();
         const accountRepository = new AccountRepositoryNoSql(connection);
-        const httpServer = new ExpressAdapter();
 
         account = Account.create('Matheus', 'Matheus Eduardo','matheus@ttest.com', true, '123456',)
         await accountRepository.save(account)
 
-        const signIn = new SignIn()
-
-        Registry.getInstance().provide('accountRepository', accountRepository)
-        Registry.getInstance().provide('signIn', signIn)
-        Registry.getInstance().provide('httpServer', httpServer)
-
-        const accountController = new AccountController();
-        
-        ControllerManager.getInstance().registerRouter(accountController)
-
-        App = new AppManager(connection, httpServer)
+        App = new AppTest()
         await App.start(port)
     })
 

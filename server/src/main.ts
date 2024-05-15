@@ -3,18 +3,20 @@ import ExpressAdapter from './infra/http/ExpressAdapter';
 import { ControllerManager } from "./infra/http/Controllers";
 import { AccountController } from "./infra/http/Controllers/AccountController";
 import { AccountRepositoryNoSql } from "./infra/repository/AccountRepositoryNoSql";
-import { AppManager } from './app'
 import { SignIn } from './account/application/useCase/SignIn';
 import { GetAccount } from './account/application/useCase/GetAccount';
 import { SignUp } from './account/application/useCase/SignUp';
 import Registry from './DI/registry';
+import { createServer } from 'node:http';
+import { SocketIoAdpter } from './infra/websocket/SocketIoAdpter';
+import { RoomController } from './infra/websocket/controllers/RoomController';
 
 const connection = new MongoDbAdapter();
 const accountRepository = new AccountRepositoryNoSql(connection);
-const httpServer = new ExpressAdapter();
+const express = new ExpressAdapter();
 
 Registry.getInstance().provide('accountRepository', accountRepository)
-Registry.getInstance().provide('httpServer', httpServer)
+Registry.getInstance().provide('httpServer', express)
 
 const getAccount = new GetAccount()
 const signUp = new SignUp()
@@ -24,10 +26,20 @@ Registry.getInstance().provide('getAccount', getAccount)
 Registry.getInstance().provide('signUp', signUp)
 Registry.getInstance().provide('signIn', signIn)
 
-const accountRouter = new AccountController();
+const accountRouter = new AccountController()
+const controllerManager = ControllerManager.getInstance()
 
-ControllerManager.getInstance().registerRouter(accountRouter)
+controllerManager.registerController(accountRouter)
+controllerManager.startControllers()
 
-const App = new AppManager(connection, httpServer)
+const server = createServer(express.app)
 
-App.start(7454)
+const websocketServer = new SocketIoAdpter(server)
+
+server.listen(7454, () => {
+    console.log('Server startado na porta 7454')
+
+    const roomController = new RoomController(websocketServer)
+    roomController.init()
+})
+

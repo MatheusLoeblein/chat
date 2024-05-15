@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from 'vitest'
 import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
-import { AppManager } from '../../../../app';
+import { AppTest } from '../../../../app';
 import ExpressAdapter from '../../../../infra/http/ExpressAdapter';
 import { ControllerManager } from '../../../../infra/http/Controllers';
 import { AccountController } from '../../../../infra/http/Controllers/AccountController';
@@ -16,7 +16,7 @@ import { SignUp } from '../../../application/useCase/SignUp';
 import { GetAccount } from '../../../application/useCase/GetAccount';
 
 describe('SignUp Intergration test', () => {
-    let App: AppManager;
+    let App: AppTest;
     let port: number = 7456
     let account:Account
     let token:string
@@ -24,24 +24,13 @@ describe('SignUp Intergration test', () => {
     beforeAll(async () => {
         const connection = new MongoDbAdapter();
         const accountRepository = new AccountRepositoryNoSql(connection);
-        const httpServer = new ExpressAdapter();
-        const getAccount = new GetAccount()
-
+        
         account = Account.create('Matheus', 'Matheus Eduardo','matheus@ttest.com', true, '123456',)
         await accountRepository.save(account)
 
-        token = JWTService.sign({accountId: account.accountId})
-
-        Registry.getInstance().provide('accountRepository', accountRepository)
-        Registry.getInstance().provide('getAccount', getAccount)
-        Registry.getInstance().provide('httpServer', httpServer)
-
-        const accountController = new AccountController();
-
-        ControllerManager.getInstance().registerRouter(accountController)
-
-        App = new AppManager(connection, httpServer)
+        App = new AppTest()
         await App.start(port)
+
     })
 
     test('Should return account data in private Route with authentication', async () => {

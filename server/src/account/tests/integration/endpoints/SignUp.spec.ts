@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, afterEach, afterAll } from 'vitest'
 import { MongoDbAdapter } from '../../../../infra/database/MongoDbAdapter';
-import { AppManager } from '../../../../app';
+import { AppTest } from '../../../../app';
 import ExpressAdapter from '../../../../infra/http/ExpressAdapter';
 import { ControllerManager } from '../../../../infra/http/Controllers';
 import { AccountController } from '../../../../infra/http/Controllers/AccountController';
@@ -13,30 +13,14 @@ import Registry from '../../../../DI/registry';
 import { SignUp } from '../../../application/useCase/SignUp';
 
 describe('SignUp Intergration test', () => {
-    let App: AppManager;
+    let App: AppTest;
     let port: number = 7456
 
     beforeEach(async () => {
         port = randomInt(7456, 7556)
-        const connection = new MongoDbAdapter();
-        const accountRepository = new AccountRepositoryNoSql(connection);
-        const httpServer = new ExpressAdapter();
-
-        const signUp = new SignUp()
-
-        Registry.getInstance().provide('accountRepository', accountRepository)
-        Registry.getInstance().provide('signUp', signUp)
-        Registry.getInstance().provide('httpServer', httpServer)
-
-        const accountController = new AccountController();
         
-        ControllerManager.getInstance().registerRouter(accountController)
-        
-        App = new AppManager(connection, httpServer)
+        App = new AppTest()
         await App.start(port)
-
-
-
     })
 
     test('Should be account id on send full data', async () => {

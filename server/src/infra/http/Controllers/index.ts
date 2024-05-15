@@ -8,11 +8,11 @@ export class ControllerManager {
         this.controllers = []
     }
 
-    registerRouter(controller: Controller) {
+    registerController(controller: Controller) {
         this.controllers.push(controller)
     }
 
-    async startRouters() {
+    async startControllers() {
         this.controllers.forEach(async controller => {
             await controller.init()
         })

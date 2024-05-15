@@ -12,7 +12,6 @@ export class SocketIoAdpter implements WebSocketServer {
     on(event: string, callback: Function): void {
         this.io.on(event, async (socket: Socket) => {
             try {
-
                 const token = socket.handshake.auth.token;
 
                 JWTService.verify(token);
@@ -20,9 +19,13 @@ export class SocketIoAdpter implements WebSocketServer {
                 await callback(socket);
             } catch (error: any) {
                 // Lidar com erros
-                console.error('Erro no WebSocket:', error.message);
+                console.error(`[ERROR] Socket ${1} ->`, error.message);
             }
         });
+    }
+
+    emit(event: string, callback: Function): void {
+        this.io.emit(event, callback)
     }
 
     listen(port: number): void {
