@@ -13,10 +13,9 @@ export class CreatePrivateRoom {
     async execute(firstAccountId: string, secondAccountId: string) {
 
         const firstAccount = await this.accountRepository?.getById(firstAccountId)
-        if (!firstAccount) throw new Error('First acccountId invalid')
-
         const secundAccount = await this.accountRepository?.getById(secondAccountId)
-        if (!secundAccount) throw new Error('Second acccountId invalid')
+
+        if (!firstAccount || !secundAccount) throw new Error('Invalid accountId')
 
         const room = Room.create('private', [
             new Sender(firstAccount.accountId, firstAccount.name.getValue(), firstAccount.cover),
