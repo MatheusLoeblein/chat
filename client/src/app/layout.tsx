@@ -7,14 +7,15 @@ import { ThemeProvider } from "@/components/ThemesProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SessionProvider from "@/components/SessionProvider";
 import { getServerSession } from "next-auth";
- 
+import { QueryClientProvider } from "@/components/QueryClientProvider";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
 
 export const metadata: Metadata = {
-  title: "Chat",
+  title: "Chateados",
   description: "Chat boladão",
 };
 
@@ -32,18 +33,19 @@ export default async function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
-
           <SessionProvider session={session}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
-              <Toaster position="top-center" richColors/>  
-            </ThemeProvider>
+            <QueryClientProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange>
+                  <TooltipProvider>
+                    {children}
+                  </TooltipProvider>
+                  <Toaster position="top-center" richColors/>  
+                </ThemeProvider>
+            </QueryClientProvider>
           </SessionProvider>
         </body>
     </html>

@@ -14,6 +14,7 @@ import { JWTService } from '../../../../services/jsonWebToken';
 import Registry from '../../../../DI/registry';
 import { SignUp } from '../../../application/useCase/SignUp';
 import { GetAccount } from '../../../application/useCase/GetAccount';
+import { convertToObject } from 'typescript';
 
 describe('SignUp Intergration test', () => {
     let App: AppTest;
@@ -28,23 +29,22 @@ describe('SignUp Intergration test', () => {
         account = Account.create('Matheus', 'Matheus Eduardo','matheus@ttest.com', true, '123456',)
         await accountRepository.save(account)
 
+        token = JWTService.sign({accountId: account.accountId, name: account.name.getValue(), cover:account.cover})
+
         App = new AppTest()
         await App.start(port)
 
     })
 
     test('Should return account data in private Route with authentication', async () => {
-        try{
 
-            const response = await axios.get(`http://localhost:${port}/accounts/${account.accountId}`,
-            {headers: {Authorization: token}}
-        )
-        
-            expect(response.status).toBe(200)
-        }
-        catch(e){
-            console.log(e)
-        }
+
+        const response = await axios.get(`http://localhost:${port}/accounts/${account.accountId}`,
+        {headers: {Authorization: token}}).catch(e => console.log(e))
+    
+    
+        expect(response.status).toBe(200)
+
     })
 
     afterAll(async () => {

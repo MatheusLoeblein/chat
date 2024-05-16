@@ -21,7 +21,7 @@ export default class Account {
 
     static create(username: string, name: string, email: string, isAdmin: boolean, password: string = "", coverInput: string = null) {
 
-        const cover = coverInput ? coverInput : "/static/defaults/userDefault.svg"
+        const cover = coverInput ? coverInput : "/static/defaults/userDefault.png"
 
         const accountId = crypto.randomUUID();
         const date = new Date();

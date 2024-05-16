@@ -17,6 +17,8 @@ import { z } from "zod"
 import { HomeBanner } from "@/components/HomeBanner";
 import Link from 'next/link'
 
+
+
 export default function Login(){
 
     const router = useRouter()
@@ -33,7 +35,7 @@ export default function Login(){
         message: "senha é requerida",
       })
     })
-  
+
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -118,8 +120,7 @@ export default function Login(){
                               </FormItem>
                             )}
                           />
-
-
+                          
                           <div className="text-xs mb-6">
                             <span className="text-primary hover:underline transition-all duration-300 ease-in-out cursor-pointer">Recuperar senha?</span>
                           </div>

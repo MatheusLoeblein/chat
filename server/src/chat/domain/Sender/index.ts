@@ -8,8 +8,6 @@ export default class Sender {
         this.cover = cover
     }
 
-
-
     getValues(): SenderValues {
         return {
             accountId: this.accountId,

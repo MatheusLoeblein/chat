@@ -15,7 +15,11 @@ export class SignIn {
 
         if (!account.password.validate(credentials.password)) throw new Error('Credentials Invalid')
 
-        const token = JWTService.sign({ accountId: account.accountId })
+        const token = JWTService.sign({ 
+            accountId: account.accountId,
+            name: account.name.getValue(),
+            cover: account.cover
+        })
 
         return { access: token }
     }

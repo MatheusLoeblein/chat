@@ -34,9 +34,13 @@ describe('SignIn Use Case', () => {
 
         const token = await signIn.execute({ username: username, password: password })
 
-        const decoded: any = decode(token)
+        const decoded: any = decode(token.access)
+
+        console.log(decoded)
 
         expect(decoded.accountId).toBe(account.accountId)
+        expect(decoded.name).toBe(account.name.getValue())
+        expect(decoded.cover).toBe(account.cover)
 
     })
 

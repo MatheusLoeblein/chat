@@ -7,22 +7,22 @@ import { Form, FormControl, FormField, FormLabel, FormItem,FormMessage } from "@
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Separator } from "@/components/ui/separator";
-import { ChevronDownSquare, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { signIn } from 'next-auth/react';
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
-import { toast } from "sonner";
-import { z } from "zod"
 import { HomeBanner } from '@/components/HomeBanner'
+import { useSignUp } from "@/hooks/Authentication/useSignUp";
+
+import { z } from "zod"
 import Link from 'next/link'
-import { api } from "@/services/api/axios";
-import axios from "axios";
 
 export default function Register(){
 
     const router = useRouter()
     const [ isLoading, setIsLoading ] = useState(false)
+
+    const { mutate , isSuccess, error } = useSignUp()
     
     //.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>.]+$/, {
     //message:'senha precisa conter uma letra minúscula, uma letra maiúscula, um caractere especial, e um numero com 8 digitos, exemplo (abcde@1A).'}),
@@ -45,21 +45,44 @@ export default function Register(){
       })
     }).refine((fields) => {
       return fields.password === fields.password_confim
-    }, {
-      message: 'Senhas não são iguais',
-      path: ['password_confim'],
-    })
+    }, 
+      {
+        message: 'Senhas não são iguais',
+        path: ['password_confim'],
+      })
   
     const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema)
+      resolver: zodResolver(formSchema),
+      defaultValues:{
+        name: '',
+        username: '',
+        email: '',
+        password: '',
+        password_confim: ''
+      }
     })
    
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await axios.post('http://localhost:7454/signup', values)      
+       const data:any = {
+          name: values.name,
+          username: values.username,
+          email: values.email,
+          password: values.password,
+      }
 
-        console.log(response)
+      mutate(data)
     }
-  
+
+    useEffect(() => {
+      if(error){
+        if(error.response.data.message.toLocaleLowerCase().startsWith('username')){
+          form.setError('username', {type: 'validate',  message: 'Nome de usuário ja esta em uso'})
+        }
+      }
+    }, [error])
+
+
+
     return(
 
       <main className="w-full md:h-screen flex bg-background relative">

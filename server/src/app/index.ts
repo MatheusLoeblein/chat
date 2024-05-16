@@ -41,14 +41,11 @@ export class AppTest {
         this.server = createServer(express.app)
 
         this.websocketServer = new SocketIoAdpter(this.server)
-
     }
 
     async start(port: number) {
-
         this.server.listen(port, () => {
             console.log(`Server startado na porta ${port}`)
-
             const roomController = new RoomController(this.websocketServer)
             roomController.init()
         })

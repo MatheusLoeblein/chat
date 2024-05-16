@@ -20,7 +20,7 @@ export class AccountController implements Controller {
 
         this.httpServer?.on("post", "/signup", async (params: any, body: any) => {
             const output = this.signUp?.execute(body)
-            console.log(body)
+
             return output;
         }, false);
 

@@ -4,6 +4,8 @@ import { JWT_SERCRET } from '../../config/config'
 
 interface IJwtData {
     accountId: string;
+    name: string;
+    cover: string;
 }
 
 const sign = (data: IJwtData) => {

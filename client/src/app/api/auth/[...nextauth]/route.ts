@@ -27,7 +27,6 @@ interface typeTokenProps {
   refresh?: string;
   accountId: number;
   name: string;
-  username: string;
   cover: string;
   expiration?: number;
 }
@@ -35,7 +34,6 @@ interface typeTokenProps {
 type JwtDecodedProps = {
     accountId: number;
     name: string;
-    username: string;
     cover: string;
 }
 
@@ -58,7 +56,6 @@ export type SessionNew = {
   user: {
     accountId: number;
     name: string;
-    username: string;
     cover: string;
   };
 };
@@ -88,7 +85,7 @@ export const handler = NextAuth({
               });
                 const { access } = response.data
 
-                console.log('DEU CERTO')
+
 
                 if (!access){
                     return null
@@ -122,11 +119,15 @@ export const handler = NextAuth({
                 if(!user.access) return Promise.resolve({})
 
                 const {
-                  accountId, 
+                  accountId,
+                  name,
+                  cover
                 } = jwtDecode<JwtDecodedProps>(user.access)
 
                 token.access = user.access
                 token.accountId = accountId
+                token.name = name
+                token.cover = cover
                 token.expiration = Math.floor(
                     actualDateInSeconds + tokenExpirationInSeconds,
                   );
@@ -146,6 +147,8 @@ export const handler = NextAuth({
             if (
                 !token?.access ||
                 !token?.accountId ||
+                !token?.name ||
+                !token?.cover ||
                 !token?.expiration
 
               ) {
@@ -154,7 +157,9 @@ export const handler = NextAuth({
 
               session.accessToken = token.access;
               session.user = {
-                accountId: token.accountId
+                accountId: token.accountId,
+                name: token.name,
+                cover: token.cover
               };
         
             return { ...session };
