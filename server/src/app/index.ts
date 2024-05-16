@@ -14,7 +14,7 @@ import { RoomController } from "../infra/websocket/controllers/RoomController";
 export class AppTest {
     connection: MongoDbAdapter
     server: any
-    websocketServer:any
+    websocketServer: any
 
     constructor() {
         this.connection = new MongoDbAdapter();
@@ -23,25 +23,25 @@ export class AppTest {
 
         Registry.getInstance().provide('accountRepository', accountRepository)
         Registry.getInstance().provide('httpServer', express)
-        
+
         const getAccount = new GetAccount()
         const signUp = new SignUp()
         const signIn = new SignIn()
-        
+
         Registry.getInstance().provide('getAccount', getAccount)
         Registry.getInstance().provide('signUp', signUp)
         Registry.getInstance().provide('signIn', signIn)
-        
+
         const accountRouter = new AccountController()
         const controllerManager = ControllerManager.getInstance()
-        
+
         controllerManager.registerController(accountRouter)
         controllerManager.startControllers()
-        
+
         this.server = createServer(express.app)
-        
+
         this.websocketServer = new SocketIoAdpter(this.server)
-        
+
     }
 
     async start(port: number) {

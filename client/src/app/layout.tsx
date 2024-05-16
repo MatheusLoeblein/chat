@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ThemesProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
+import SessionProvider from "@/components/SessionProvider";
+import { getServerSession } from "next-auth";
  
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -17,27 +18,33 @@ export const metadata: Metadata = {
   description: "Chat boladão",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await getServerSession()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body  className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
-            <Toaster position="top-center" richColors/>  
-          </ThemeProvider>
+
+          <SessionProvider session={session}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+              <Toaster position="top-center" richColors/>  
+            </ThemeProvider>
+          </SessionProvider>
         </body>
     </html>
   );

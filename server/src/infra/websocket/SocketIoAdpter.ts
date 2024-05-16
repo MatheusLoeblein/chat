@@ -12,9 +12,9 @@ export class SocketIoAdpter implements WebSocketServer {
     on(event: string, callback: Function): void {
         this.io.on(event, async (socket: Socket) => {
             try {
-                const token = socket.handshake.auth.token;
+                // const token = socket.handshake.auth.token;
 
-                JWTService.verify(token);
+                // JWTService.verify(token);
 
                 await callback(socket);
             } catch (error: any) {

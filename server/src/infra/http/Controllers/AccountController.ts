@@ -8,18 +8,19 @@ import { inject } from "../../../DI/inject";
 
 export class AccountController implements Controller {
     @inject('signUp')
-    signUp?:SignUp
+    signUp?: SignUp
     @inject('signIn')
-    signIn?:SignIn
+    signIn?: SignIn
     @inject('getAccount')
-    getAccount?:GetAccount
+    getAccount?: GetAccount
     @inject('httpServer')
-    httpServer?:HttpServer
+    httpServer?: HttpServer
 
     async init() {
 
         this.httpServer?.on("post", "/signup", async (params: any, body: any) => {
             const output = this.signUp?.execute(body)
+            console.log(body)
             return output;
         }, false);
 

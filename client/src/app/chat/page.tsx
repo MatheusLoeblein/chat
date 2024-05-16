@@ -62,13 +62,18 @@ import { z } from "zod"
 
 import { EllipsisVertical, ChevronDown } from 'lucide-react';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger } from "@/components/ui/menubar";
+import { useSession } from "next-auth/react";
+
 
 export default function Chat() {
   const [status, setStatus] = useState(socket.connected)
   const [events, setEvents] = useState<any[]>([])
   const [value, setValue] = useState<string>('')
 
-  
+  const { data, status:states  } = useSession()
+
+
+  console.log(data, states)
 
   const formSchema = z.object({
     message: z.string(),
