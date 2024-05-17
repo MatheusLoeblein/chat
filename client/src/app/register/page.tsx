@@ -81,8 +81,6 @@ export default function Register(){
       }
     }, [error])
 
-
-
     return(
 
       <main className="w-full md:h-screen flex bg-background relative">

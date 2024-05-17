@@ -3,10 +3,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSession } from "next-auth/react"
+import { useMenuContext } from "@/context/MenuContext"
 
 
 export function Account(){
     const { data } = useSession()
+    const { setMenuView } = useMenuContext()
 
     return(
         <Tooltip>
@@ -17,6 +19,7 @@ export function Account(){
                     size="icon"
                     className="mt-auto rounded flex justify-center items-center"
                     aria-label="Account"
+                    onClick={() => setMenuView('account')}
                     >
                     <Avatar className="w-8 h-8">
                         {/* @ts-ignore */}

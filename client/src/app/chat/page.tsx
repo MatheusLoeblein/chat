@@ -50,12 +50,19 @@ import { MyMessage } from "@/components/Message/MyMessage";
 import { OtherMessage } from "@/components/Message/OtherMessage";
 import { Menu } from "@/components/Menu";
 import { RoomsList } from "@/components/RoomsList";
+import { useMenuContext } from "@/context/MenuContext";
+import { AccountMenu } from "@/components/Account/Menu";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 
 export default function Chat() {
   const [status, setStatus] = useState(socket.connected)
   const [events, setEvents] = useState<any[]>([])
   const [value, setValue] = useState<string>('')
+
+  const { menuView, setMenuView } = useMenuContext()
+
 
   const {data} = useSession()
 
@@ -120,8 +127,17 @@ export default function Chat() {
           <Menu/>
           <div className="flex flex-col">
             <main className="flex flex-1 overflow-auto">
-              
-              <RoomsList/>
+
+          <AnimatePresence key={menuView}>
+            <motion.div
+            initial={{ opacity: 0, x:-20}}
+            animate={{ opacity: 1, x: 0}}
+            exit={{ opacity: 0, x:-20 }}
+            className="relative overflow-x-hidden hidden flex-col items-start md:w-[22.5rem]  lg:flex lg:w-[26rem]" x-chunk="dashboard-03-chunk-0">
+              { menuView === 'chat' && (<RoomsList/>) }
+              { menuView === 'account' && (<AccountMenu/>) }
+            </motion.div>
+          </AnimatePresence>
 
               <div className="relative flex flex-col bg-muted/100 grow  rounded-none border-l border-gray-200 dark:border-muted lg:w-[calc(100vw-22.5rem-118px)]">
 

@@ -1,9 +1,14 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Book, Bot, Code2, LifeBuoy, Settings2, SquareTerminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Account } from "../Account"
+import { Account } from "../Account/MenuButton"
+import { signOut } from "next-auth/react"
+import { MessageSquareText, BookUser  } from 'lucide-react';
+import { useMenuContext } from "@/context/MenuContext"
 
 export function Menu(){
+    const { menuView, setMenuView } = useMenuContext()
+
     return(
         <aside className="fixed inset-y left-0 z-20 flex h-full flex-col border-r">
             <nav className="grid gap-1 p-2">
@@ -12,14 +17,15 @@ export function Menu(){
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="rounded bg-muted"
-                        aria-label="Playground"
+                        className={`rounded ${ menuView == 'chat' && 'bg-muted'}`}
+                        aria-label="Chats"
+                        onClick={() => setMenuView('chat')}
                     >
-                        <SquareTerminal className="size-5" />
+                        <MessageSquareText className="size-5" />
                     </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
-                        Playground
+                        Chats
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -27,14 +33,15 @@ export function Menu(){
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="rounded"
-                        aria-label="Models"
+                        className={`rounded ${ menuView == 'contacts' && 'bg-muted'}`}
+                        aria-label="Contacts"
+                        onClick={() => setMenuView('contacts')}
                     >
-                        <Bot className="size-5" />
+                        <BookUser className="size-5" />
                     </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
-                        Models
+                        Contacts
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -87,6 +94,12 @@ export function Menu(){
                 <Tooltip>
                     <TooltipTrigger asChild>
                     <Button
+                        onClick={() => {
+                            signOut({
+                                redirect: true,    
+                                callbackUrl: '/'
+                            })
+                        }}
                         variant="ghost"
                         size="icon"
                         className="mt-auto rounded"
@@ -96,7 +109,7 @@ export function Menu(){
                     </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
-                    Help
+                    Logout
                     </TooltipContent>
                 </Tooltip>
 

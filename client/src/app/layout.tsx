@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import SessionProvider from "@/components/SessionProvider";
 import { getServerSession } from "next-auth";
 import { QueryClientProvider } from "@/components/QueryClientProvider";
+import { MenuContextProvider } from "@/context/MenuContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,7 +42,9 @@ export default async function RootLayout({
                   enableSystem
                   disableTransitionOnChange>
                   <TooltipProvider>
-                    {children}
+                    <MenuContextProvider>
+                      {children}
+                    </MenuContextProvider>
                   </TooltipProvider>
                   <Toaster position="top-center" richColors/>  
                 </ThemeProvider>
