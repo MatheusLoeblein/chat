@@ -51,7 +51,7 @@ import { OtherMessage } from "@/components/Message/OtherMessage";
 import { Menu } from "@/components/Menu";
 import { RoomsList } from "@/components/RoomsList";
 import { useMenuContext } from "@/context/MenuContext";
-import { AccountMenu } from "@/components/Account/Menu";
+import { AccountMenu } from "@/components/Account/View";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
