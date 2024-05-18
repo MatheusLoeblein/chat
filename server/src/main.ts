@@ -10,6 +10,8 @@ import Registry from './DI/registry';
 import { createServer } from 'node:http';
 import { SocketIoAdpter } from './infra/websocket/SocketIoAdpter';
 import { RoomController } from './infra/websocket/controllers/RoomController';
+import { GetContacts } from './account/application/useCase/GetContacts';
+import { AddContact } from './account/application/useCase/AddContact';
 
 const connection = new MongoDbAdapter();
 const accountRepository = new AccountRepositoryNoSql(connection);
@@ -21,10 +23,14 @@ Registry.getInstance().provide('httpServer', express)
 const getAccount = new GetAccount()
 const signUp = new SignUp()
 const signIn = new SignIn()
+const getContacts = new GetContacts()
+const addContact = new AddContact()
 
 Registry.getInstance().provide('getAccount', getAccount)
 Registry.getInstance().provide('signUp', signUp)
 Registry.getInstance().provide('signIn', signIn)
+Registry.getInstance().provide('getContacts', getContacts)
+Registry.getInstance().provide('addContact', addContact)
 
 const accountRouter = new AccountController()
 const controllerManager = ControllerManager.getInstance()
@@ -43,3 +49,4 @@ server.listen(7454, () => {
     roomController.init()
 })
 
+export { server }

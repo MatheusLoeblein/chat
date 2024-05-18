@@ -1,8 +1,8 @@
+import { fileURLToPath } from 'url';
 import { AccountRepository } from '../../../account/application/repository/AccountRepository'
 import Account from '../../../account/domain/Account';
 
 export class AccountRepositoryInMemory implements AccountRepository {
-
     accounts: Account[] = []
 
     async save(account: Account): Promise<void> {
@@ -29,6 +29,16 @@ export class AccountRepositoryInMemory implements AccountRepository {
         if (!account) return
 
         return account
+    }
+
+    async update(account: Account): Promise<void> {
+        const accountIndex = this.accounts.findIndex(account => account.accountId === account.accountId);
+
+        if (accountIndex === -1) {
+            throw new Error('Account not found');
+        }
+
+        this.accounts[accountIndex] = account;
     }
 
 }

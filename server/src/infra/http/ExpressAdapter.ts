@@ -20,7 +20,8 @@ export default class ExpressAdapter implements HttpServer {
         this.app[method](url, async function (req: Request, res: Response) {
             try {
                 if (privateRoute) {
-                    JWTService.verify(req.headers.authorization)
+                    const user = JWTService.verify(req.headers.authorization)
+                    req.params['user'] = user
                 }
                 const statusCode = req.method === 'POST' ? 201 : 200
                 const output = await callback(req.params, req.body);

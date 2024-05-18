@@ -28,16 +28,16 @@ export default class Contacts {
         return new Contacts(activelist, blockedlist)
     }
 
-    addContact(sender: Sender): void {
-        this.contacts.push(sender)
+    addContact(accountId: string, name: string, cover: string): void {
+        this.contacts.push(new Sender(accountId, name, cover))
     }
 
     removeContact(accountId: string): void {
         this.contacts = this.contacts.filter((sender) => sender.accountId != accountId)
     }
 
-    blockContact(sender: Sender): void {
-        this.blockeds.push(sender)
+    blockContact(accountId: string, name: string, cover: string): void {
+        this.blockeds.push(new Sender(accountId, name, cover))
     }
 
     removeBlockeContact(accountId: string): void {

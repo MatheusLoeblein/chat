@@ -5,6 +5,7 @@ import { NoSqlConnection } from '../../database/Connection'
 export class AccountRepositoryNoSql implements AccountRepository {
     constructor(readonly connection: NoSqlConnection) { }
 
+
     async save(account: Account): Promise<void> {
 
         await this.connection.insert('account', {
@@ -70,8 +71,8 @@ export class AccountRepositoryNoSql implements AccountRepository {
 
     async getByUsername(username: string): Promise<undefined | Account> {
         const account = await this.connection.find('account', { username: username })
-        if (!account) return
 
+        if (!account) return
 
         return Account.restore(
             account.accountId,
@@ -89,6 +90,26 @@ export class AccountRepositoryNoSql implements AccountRepository {
         )
     }
 
+    async update(account: Account): Promise<void> {
+        await this.connection.update('account', { accountId: account.accountId }, {
+            $set: {
+                accountId: account.accountId,
+                username: account.username.getValue(),
+                name: account.name.getValue(),
+                email: account.email.getValue(),
+                isAdmin: account.isAdmin,
+                date: account.date,
+                password: account.password.value,
+                password_salt: account.password.salt,
+                password_algorithm: account.password.algorithm,
+                contactList: {
+                    contacts: account.contacts.getContacts(),
+                    blockeds: account.contacts.getBlockeds()
+                },
+                cover: account.cover
+            }
+        })
+    }
 }
 
 

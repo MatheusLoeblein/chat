@@ -18,7 +18,7 @@ describe('SignUp Intergration test', () => {
 
     beforeEach(async () => {
         port = randomInt(7456, 7556)
-        
+
         App = new AppTest()
         await App.start(port)
     })
@@ -122,6 +122,6 @@ describe('SignUp Intergration test', () => {
 
     afterEach(async () => {
         await App.close()
-        
+
     })
 })

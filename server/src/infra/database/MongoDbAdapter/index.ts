@@ -8,7 +8,6 @@ export class MongoDbAdapter implements NoSqlConnection {
 
     constructor() {
         this.connection = new MongoClient(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`)
-
     }
 
     async insert(collection: string, data: any): Promise<any> {
