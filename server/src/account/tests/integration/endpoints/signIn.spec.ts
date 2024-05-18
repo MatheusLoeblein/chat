@@ -17,13 +17,13 @@ import { SignIn } from '../../../application/useCase/SignIn';
 describe('SignUp Intergration test', () => {
     let App: AppTest;
     let port: number = 7456
-    let account:Account
+    let account: Account
 
     beforeAll(async () => {
         const connection = new MongoDbAdapter();
         const accountRepository = new AccountRepositoryNoSql(connection);
 
-        account = Account.create('Matheus', 'Matheus Eduardo','matheus@ttest.com', true, '123456',)
+        account = Account.create('Matheus', 'Matheus Eduardo', 'matheus@ttest.com', true, '123456',)
         await accountRepository.save(account)
 
         App = new AppTest()
@@ -36,15 +36,16 @@ describe('SignUp Intergration test', () => {
             password: '123456'
         })
 
-        const decoded:any = decode(response.data)
+
+        const decoded: any = decode(response.data.access)
 
         expect(decoded.accountId).toBe(account.accountId)
         expect(decoded).toHaveProperty('iat')
         expect(decoded).toHaveProperty('exp')
-        
+
 
     })
-    
+
     afterAll(async () => {
         await App.close()
     })

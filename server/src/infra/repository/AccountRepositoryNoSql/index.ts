@@ -17,11 +17,16 @@ export class AccountRepositoryNoSql implements AccountRepository {
             password: account.password.value,
             password_salt: account.password.salt,
             password_algorithm: account.password.algorithm,
+            contactList: {
+                contacts: account.contacts.getContacts(),
+                blockeds: account.contacts.getBlockeds()
+            },
             cover: account.cover
         })
     }
     async getById(accountId: string): Promise<undefined | Account> {
         const account = await this.connection.find('account', { accountId: accountId })
+
 
         if (!account) return
 
@@ -35,6 +40,8 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.contactList.contacts,
+            account.contactList.blockeds,
             account.cover
         )
     }
@@ -44,6 +51,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
 
         if (!account) return
 
+
         return Account.restore(
             account.accountId,
             account.username,
@@ -54,6 +62,8 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.contactList.contacts,
+            account.contactList.blockeds,
             account.cover
         )
     }
@@ -62,6 +72,7 @@ export class AccountRepositoryNoSql implements AccountRepository {
         const account = await this.connection.find('account', { username: username })
         if (!account) return
 
+
         return Account.restore(
             account.accountId,
             account.username,
@@ -72,8 +83,12 @@ export class AccountRepositoryNoSql implements AccountRepository {
             account.password,
             account.password_algorithm,
             account.password_salt,
+            account.contactList.contacts,
+            account.contactList.blockeds,
             account.cover
         )
     }
 
 }
+
+

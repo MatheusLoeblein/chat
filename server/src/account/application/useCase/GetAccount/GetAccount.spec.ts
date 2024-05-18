@@ -15,7 +15,6 @@ describe('GetAccount UseCase', () => {
         const email = 'john@example.com';
         const isAdmin = false;
         const password = 'password123';
-
         account = Account.create(username, name, email, isAdmin, password);
         const repository = new AccountRepositoryInMemory()
 

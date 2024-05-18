@@ -32,6 +32,7 @@ describe('Account no SQL Repository', () => {
     test('getById() Should be add account in account list', async () => {
         const accountData = await repository.getById(account.accountId)
 
+
         expect(accountData).toBeInstanceOf(Account)
         expect(accountData.username.getValue()).toBe(username)
         expect(accountData.name.getValue()).toBe(name)

@@ -5,6 +5,8 @@ import Name from '../Name';
 import Email from '../Email';
 import { randomUUID, randomInt } from 'crypto'
 import Username from "../Username";
+import Contacts from "../Contacts";
+import Sender from "../../../chat/domain/Sender";
 
 describe('Account', () => {
     // Teste para o método create()
@@ -23,6 +25,7 @@ describe('Account', () => {
         expect(account.email).toEqual(expect.any(Email));
         expect(account.isAdmin).toBe(isAdmin);
         expect(account.password).toEqual(expect.any(PBKDF2Password));
+        expect(account.cover).toBe('/static/defaults/userDefault.png')
     });
 
     // Teste para o método restore()
@@ -36,8 +39,18 @@ describe('Account', () => {
         const password = 'password123';
         const passwordAlgorithm = 'pbkdf2';
         const salt = 'salt123';
+        const contacts = [{
+            accountId: randomUUID(),
+            name: 'Funlano de tal',
+            cover: ''
+        }]
+        const blockeds = [{
+            accountId: randomUUID(),
+            name: 'Siclano de tal',
+            cover: ''
+        }]
 
-        const account = Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, 'cover');
+        const account = Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, contacts, blockeds, 'cover');
 
         expect(account).toBeInstanceOf(Account);
         expect(account.accountId).toBe(accountId);
@@ -47,6 +60,9 @@ describe('Account', () => {
         expect(account.isAdmin).toBe(isAdmin);
         expect(account.date).toBe(date);
         expect(account.password).toEqual(expect.any(PBKDF2Password));
+        expect(account.contacts).toBeInstanceOf(Contacts)
+        expect(account.contacts.contacts[0]).toBeInstanceOf(Sender)
+        expect(account.contacts.blockeds[0]).toBeInstanceOf(Sender)
     });
 
     test('restore() should return error on input invalid uuid', () => {
@@ -59,9 +75,18 @@ describe('Account', () => {
         const password = 'password123';
         const passwordAlgorithm = 'pbkdf2';
         const salt = 'salt123';
+        const contacts = [{
+            accountId: randomUUID(),
+            name: 'Funlano de tal',
+            cover: ''
+        }]
+        const blockeds = [{
+            accountId: randomUUID(),
+            name: 'Siclano de tal',
+            cover: ''
+        }]
 
-
-        const account = () => Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, 'cover');
+        const account = () => Account.restore(accountId, username, name, email, isAdmin, date, password, passwordAlgorithm, salt, contacts, blockeds, 'cover');
 
         expect(account).toThrow(Error);
         expect(account).toThrowError('UUID not valid!');
